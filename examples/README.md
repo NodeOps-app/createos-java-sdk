@@ -15,22 +15,22 @@ Run an example with the SDK dependencies on the classpath:
 ```sh
 mvn dependency:build-classpath -Dmdep.outputFile=/tmp/createos-java-classpath
 java -cp "target/classes:target/example-classes:$(cat /tmp/createos-java-classpath)" \
-  network.nodeops.createos.examples.helloworld.HelloWorld
+  sh.createos.examples.helloworld.HelloWorld
 ```
 
 Replace the final class with one of these:
 
 | Go example | Java main class |
 | --- | --- |
-| `hello-world` | `network.nodeops.createos.examples.helloworld.HelloWorld` |
-| `command-streaming` | `network.nodeops.createos.examples.commandstreaming.CommandStreaming` |
-| `custom-template` | `network.nodeops.createos.examples.customtemplate.CustomTemplate` |
-| `desktop` | `network.nodeops.createos.examples.desktop.Desktop` |
-| `execution-server` | `network.nodeops.createos.examples.executionserver.ExecutionServer` |
-| `files-and-snapshots` | `network.nodeops.createos.examples.filesandsnapshots.FilesAndSnapshots` |
-| `ingress-preview` | `network.nodeops.createos.examples.ingresspreview.IngressPreview` |
-| `managed-process` | `network.nodeops.createos.examples.managedprocess.ManagedProcessExample` |
-| `network` | `network.nodeops.createos.examples.network.NetworkExample` |
+| `hello-world` | `sh.createos.examples.helloworld.HelloWorld` |
+| `command-streaming` | `sh.createos.examples.commandstreaming.CommandStreaming` |
+| `custom-template` | `sh.createos.examples.customtemplate.CustomTemplate` |
+| `desktop` | `sh.createos.examples.desktop.Desktop` |
+| `execution-server` | `sh.createos.examples.executionserver.ExecutionServer` |
+| `files-and-snapshots` | `sh.createos.examples.filesandsnapshots.FilesAndSnapshots` |
+| `ingress-preview` | `sh.createos.examples.ingresspreview.IngressPreview` |
+| `managed-process` | `sh.createos.examples.managedprocess.ManagedProcessExample` |
+| `network` | `sh.createos.examples.network.NetworkExample` |
 
 Examples create billable resources. Their `finally` blocks make a best effort
 to destroy sandboxes and delete temporary account resources.

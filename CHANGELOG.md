@@ -17,6 +17,10 @@ Versioning and the Keep a Changelog structure.
 - Read the default API key from `CREATEOS_API_KEY` instead of
   `CREATEOS_SANDBOX_API_KEY`.
 - Prepare signed, tag-triggered Maven Central publishing and GitHub Releases.
+- Rebranded Maven coordinates from `network.nodeops:createos-java-sdk` to
+  `sh.createos:createos-java-sdk`. Java packages moved from
+  `network.nodeops.createos` to `sh.createos` accordingly. No release used
+  the old coordinates.
 
 ### Removed
 

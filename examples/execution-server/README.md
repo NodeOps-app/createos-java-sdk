@@ -4,7 +4,7 @@ This example exposes `POST /v1/execute` on `127.0.0.1:8080`. Each request
 creates a fresh sandbox, runs one command without shell interpolation, returns
 its output as JSON, and destroys the sandbox.
 
-Run `network.nodeops.createos.examples.executionserver.ExecutionServer` as
+Run `sh.createos.examples.executionserver.ExecutionServer` as
 described in the examples index, then send a request:
 
 ```sh

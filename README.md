@@ -19,7 +19,7 @@ Then add the locally installed SDK to your project's `pom.xml`. Replace
 ```xml
 <dependencies>
   <dependency>
-    <groupId>network.nodeops</groupId>
+    <groupId>sh.createos</groupId>
     <artifactId>createos-java-sdk</artifactId>
     <version>YOUR_INSTALLED_VERSION</version>
   </dependency>
@@ -29,17 +29,17 @@ Then add the locally installed SDK to your project's `pom.xml`. Replace
 No package-download token or extra Maven repository is needed for the local
 installation.
 
-The compile-checked [hello-world example](examples/src/main/java/network/nodeops/createos/examples/helloworld/HelloWorld.java)
+The compile-checked [hello-world example](examples/src/main/java/sh/createos/examples/helloworld/HelloWorld.java)
 creates a sandbox, runs a command, prints its output, and always destroys the
 resource. Set `CREATEOS_API_KEY` in your environment before running it:
 
 ```java
-package network.nodeops.createos.examples.helloworld;
+package sh.createos.examples.helloworld;
 
-import network.nodeops.createos.CreateOsClient;
-import network.nodeops.createos.Sandbox;
-import network.nodeops.createos.model.CreateSandboxRequest;
-import network.nodeops.createos.model.RunCommandRequest;
+import sh.createos.CreateOsClient;
+import sh.createos.Sandbox;
+import sh.createos.model.CreateSandboxRequest;
+import sh.createos.model.RunCommandRequest;
 
 public final class HelloWorld {
   private HelloWorld() {}
@@ -137,7 +137,7 @@ try (var stream =
 }
 ```
 
-The compile-checked [command-streaming example](examples/src/main/java/network/nodeops/createos/examples/commandstreaming/CommandStreaming.java)
+The compile-checked [command-streaming example](examples/src/main/java/sh/createos/examples/commandstreaming/CommandStreaming.java)
 uploads a Python program and consumes normalized stdout, stderr, exit, error,
 and heartbeat events. Closing a command or process stream closes its HTTP
 response body. Downloads, screenshots, and template log streams must also be
@@ -172,7 +172,7 @@ The timeout covers the complete transfer, including reading the downloaded
 body. Uploads are not retried because an arbitrary `InputStream` may not be
 safe to replay after a partial write.
 
-The compile-checked [files-and-snapshots example](examples/src/main/java/network/nodeops/createos/examples/filesandsnapshots/FilesAndSnapshots.java)
+The compile-checked [files-and-snapshots example](examples/src/main/java/sh/createos/examples/filesandsnapshots/FilesAndSnapshots.java)
 uploads files, pauses a sandbox, creates a copy-on-write fork, resumes both
 sandboxes, and verifies that their filesystems diverge.
 
@@ -200,7 +200,7 @@ ManagedProcess completed =
         .waitFor(process.processId(), "tree", Duration.ofSeconds(30));
 ```
 
-The compile-checked [managed-process example](examples/src/main/java/network/nodeops/createos/examples/managedprocess/ManagedProcessExample.java)
+The compile-checked [managed-process example](examples/src/main/java/sh/createos/examples/managedprocess/ManagedProcessExample.java)
 also demonstrates output replay, standard input, interactive PTYs, terminal
 resize, signals, and process-tree deletion.
 
@@ -232,7 +232,7 @@ URI previewUrl = sandbox.previewUrl(8080);
 System.out.println(previewUrl);
 ```
 
-The compile-checked [ingress-preview example](examples/src/main/java/network/nodeops/createos/examples/ingresspreview/IngressPreview.java)
+The compile-checked [ingress-preview example](examples/src/main/java/sh/createos/examples/ingresspreview/IngressPreview.java)
 runs the complete flow and fetches the public response.
 
 ## Everything is already connected
@@ -261,7 +261,7 @@ sandbox.computer().windows();
 sandbox.computer().screens();
 ```
 
-The compile-checked [custom-template example](examples/src/main/java/network/nodeops/createos/examples/customtemplate/CustomTemplate.java)
+The compile-checked [custom-template example](examples/src/main/java/sh/createos/examples/customtemplate/CustomTemplate.java)
 builds a Docker-enabled root filesystem, follows build logs, creates a sandbox
 from the finished template, and runs containers.
 
@@ -289,7 +289,7 @@ try {
 }
 ```
 
-The compile-checked [private-network example](examples/src/main/java/network/nodeops/createos/examples/network/NetworkExample.java)
+The compile-checked [private-network example](examples/src/main/java/sh/createos/examples/network/NetworkExample.java)
 runs this complete lifecycle.
 
 ## Lifecycle reads like the domain
@@ -316,14 +316,14 @@ mutations and `refresh()` update it, while `id()`, `name()`, `status()`,
 
 Build a sandbox root filesystem from a Dockerfile, follow its build logs, and
 wait until the template is ready before creating a sandbox from its ID. See the
-[custom template example](examples/src/main/java/network/nodeops/createos/examples/customtemplate/CustomTemplate.java)
+[custom template example](examples/src/main/java/sh/createos/examples/customtemplate/CustomTemplate.java)
 for the complete workflow and cleanup.
 
 ## Automate a desktop
 
 The desktop root filesystem supports screenshots, mouse and keyboard control,
 clipboard access, and temporary noVNC connections. The
-[desktop example](examples/src/main/java/network/nodeops/createos/examples/desktop/Desktop.java)
+[desktop example](examples/src/main/java/sh/createos/examples/desktop/Desktop.java)
 exercises these operations.
 
 ## Errors stay inspectable
@@ -349,15 +349,15 @@ Runnable examples live under [`examples/`](examples/). Every example listed
 here is compiled during `mvn verify`, checked with Google Java style, and
 validated by `ExamplesDocumentationTest`:
 
-- [Hello world](examples/src/main/java/network/nodeops/createos/examples/helloworld/HelloWorld.java)
-- [HTTP execution server](examples/src/main/java/network/nodeops/createos/examples/executionserver/ExecutionServer.java)
-- [Command streaming](examples/src/main/java/network/nodeops/createos/examples/commandstreaming/CommandStreaming.java)
-- [Files and snapshots](examples/src/main/java/network/nodeops/createos/examples/filesandsnapshots/FilesAndSnapshots.java)
-- [Ingress preview](examples/src/main/java/network/nodeops/createos/examples/ingresspreview/IngressPreview.java)
-- [Private overlay network](examples/src/main/java/network/nodeops/createos/examples/network/NetworkExample.java)
-- [Custom template](examples/src/main/java/network/nodeops/createos/examples/customtemplate/CustomTemplate.java)
-- [Managed process lifecycle](examples/src/main/java/network/nodeops/createos/examples/managedprocess/ManagedProcessExample.java)
-- [Desktop and noVNC](examples/src/main/java/network/nodeops/createos/examples/desktop/Desktop.java)
+- [Hello world](examples/src/main/java/sh/createos/examples/helloworld/HelloWorld.java)
+- [HTTP execution server](examples/src/main/java/sh/createos/examples/executionserver/ExecutionServer.java)
+- [Command streaming](examples/src/main/java/sh/createos/examples/commandstreaming/CommandStreaming.java)
+- [Files and snapshots](examples/src/main/java/sh/createos/examples/filesandsnapshots/FilesAndSnapshots.java)
+- [Ingress preview](examples/src/main/java/sh/createos/examples/ingresspreview/IngressPreview.java)
+- [Private overlay network](examples/src/main/java/sh/createos/examples/network/NetworkExample.java)
+- [Custom template](examples/src/main/java/sh/createos/examples/customtemplate/CustomTemplate.java)
+- [Managed process lifecycle](examples/src/main/java/sh/createos/examples/managedprocess/ManagedProcessExample.java)
+- [Desktop and noVNC](examples/src/main/java/sh/createos/examples/desktop/Desktop.java)
 
 Run commands are documented in the [examples index](examples/README.md).
 Examples are compiled into `target/example-classes` and excluded from the SDK
@@ -385,10 +385,10 @@ warnings; and builds source and Javadoc JARs.
 ## Package layout
 
 ```text
-src/main/java/network/nodeops/createos/          client and resource services
-src/main/java/network/nodeops/createos/model/    immutable public contracts
-src/main/java/network/nodeops/createos/internal/ transport and stream decoding
-examples/                                        runnable, compile-checked programs
+src/main/java/sh/createos/          client and resource services
+src/main/java/sh/createos/model/    immutable public contracts
+src/main/java/sh/createos/internal/ transport and stream decoding
+examples/                           runnable, compile-checked programs
 ```
 
 ## About CreateOS

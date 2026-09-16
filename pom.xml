@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>network.nodeops</groupId>
+  <groupId>sh.createos</groupId>
   <artifactId>createos-java-sdk</artifactId>
   <version>0.1.1-SNAPSHOT</version>
   <name>CreateOS Java SDK</name>
@@ -13,8 +13,8 @@
 
   <developers>
     <developer>
-      <name>NodeOps Inc.</name>
-      <organization>NodeOps</organization>
+      <name>CreateOS Inc.</name>
+      <organization>CreateOS</organization>
       <organizationUrl>https://createos.sh</organizationUrl>
     </developer>
   </developers>
@@ -164,7 +164,7 @@
                 </rule>
               </rules>
               <excludes>
-                <exclude>network/nodeops/createos/model/**</exclude>
+                <exclude>sh/createos/model/**</exclude>
               </excludes>
             </configuration>
           </execution>
