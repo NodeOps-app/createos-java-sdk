@@ -5,8 +5,9 @@ open a preview URL, and tear everything down from Java.
 
 ## Your first sandbox
 
-After the `v0.1.0` tag is released, add the GitHub Packages Maven repository and
-the SDK dependency to your project:
+Version [`0.1.0`](https://github.com/NodeOps-app/createos-java-sdk/releases/tag/v0.1.0)
+is published on GitHub Packages. Add the repository and dependency to your
+project's `pom.xml`:
 
 ```xml
 <repositories>
@@ -26,9 +27,10 @@ the SDK dependency to your project:
 ```
 
 GitHub Packages requires authentication to download Maven packages, including
-public packages. Put a GitHub personal access token (classic) with
-`read:packages` in your environment, not your project source. Configure Maven
-to read it from `~/.m2/settings.xml`:
+public packages. Set `GITHUB_USERNAME` to your GitHub username and
+`GITHUB_TOKEN` to a personal access token (classic) with `read:packages` in
+your environment or secret manager. Do not commit either value. Configure Maven
+to read them from `~/.m2/settings.xml`:
 
 ```xml
 <settings>
@@ -114,12 +116,6 @@ the build enforces the [Google Java Style Guide](https://google.github.io/styleg
   contains the REST API reference and product guides.
 - Javadocs are generated with `mvn javadoc:javadoc` and published as an
   attached artifact by `mvn verify`.
-- [CreateOS TypeScript SDK](https://github.com/NodeOps-app/createos-sandbox-sdk)
-  provides the same sandbox capabilities for JavaScript and TypeScript.
-- [CreateOS Python SDK](https://github.com/NodeOps-app/createos-python-sdk)
-  provides the same sandbox capabilities for Python applications.
-- [CreateOS Go SDK](https://github.com/NodeOps-app/createos-go-sdk) is the
-  behavioral reference for endpoint paths and wire contracts.
 - [Runnable examples](#examples) cover commands, files, streaming, ingress,
   snapshots, networking, templates, managed processes, and desktop use.
 - [Contributing guide](CONTRIBUTING.md) documents development checks and commit
@@ -127,6 +123,15 @@ the build enforces the [Google Java Style Guide](https://google.github.io/styleg
 - [Security policy](SECURITY.md) explains private vulnerability reporting and
   the SDK security boundary.
 - [Changelog](CHANGELOG.md) tracks release-visible changes.
+
+### SDKs
+
+- [TypeScript](https://github.com/NodeOps-app/createos-sandbox-sdk)
+- [Python](https://github.com/NodeOps-app/createos-python-sdk)
+- [Go](https://github.com/NodeOps-app/createos-go-sdk)
+- [C#](https://github.com/NodeOps-app/createos-csharp-sdk)
+- [Java](https://github.com/NodeOps-app/createos-java-sdk)
+- [Rust](https://github.com/NodeOps-app/createos-rust-sdk)
 
 ## Stream output as it happens
 
