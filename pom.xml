@@ -6,7 +6,7 @@
 
   <groupId>network.nodeops</groupId>
   <artifactId>createos-java-sdk</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.0</version>
   <name>CreateOS Java SDK</name>
   <description>Java SDK for CreateOS Sandbox</description>
   <url>https://github.com/NodeOps-app/createos-java-sdk</url>
@@ -39,6 +39,14 @@
     <url>https://github.com/NodeOps-app/createos-java-sdk/issues</url>
   </issueManagement>
 
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/NodeOps-app/createos-java-sdk</url>
+    </repository>
+  </distributionManagement>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
@@ -70,6 +78,11 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.4</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>

@@ -5,21 +5,45 @@ open a preview URL, and tear everything down from Java.
 
 ## Your first sandbox
 
-The SDK currently ships as a development snapshot. Install it locally:
-
-```sh
-mvn install
-```
-
-Then add it to a Maven project:
+After the `v0.1.0` tag is released, add the GitHub Packages Maven repository and
+the SDK dependency to your project:
 
 ```xml
-<dependency>
-  <groupId>network.nodeops</groupId>
-  <artifactId>createos-java-sdk</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
-</dependency>
+<repositories>
+  <repository>
+    <id>github</id>
+    <url>https://maven.pkg.github.com/NodeOps-app/createos-java-sdk</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>network.nodeops</groupId>
+    <artifactId>createos-java-sdk</artifactId>
+    <version>0.1.0</version>
+  </dependency>
+</dependencies>
 ```
+
+GitHub Packages requires authentication to download Maven packages, including
+public packages. Put a GitHub personal access token (classic) with
+`read:packages` in your environment, not your project source. Configure Maven
+to read it from `~/.m2/settings.xml`:
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>github</id>
+      <username>${env.GITHUB_USERNAME}</username>
+      <password>${env.GITHUB_TOKEN}</password>
+    </server>
+  </servers>
+</settings>
+```
+
+For local development from this checkout, run `mvn install` instead of
+configuring GitHub Packages.
 
 The compile-checked [hello-world example](examples/src/main/java/network/nodeops/createos/examples/helloworld/HelloWorld.java)
 creates a sandbox, runs a command, prints its output, and always destroys the
@@ -342,7 +366,7 @@ JAR. Live execution is opt-in because it creates real CreateOS resources.
 Use Java 17 or newer and Maven 3.9 or newer:
 
 ```sh
-make install
+mvn install
 make format
 make check
 make test
@@ -355,6 +379,22 @@ examples.
 CI compiles the SDK and every example on Java 17, 21, and 25; runs JUnit and
 the coverage gate; verifies Google Java formatting; requires zero Checkstyle
 warnings; and builds source and Javadoc JARs.
+
+## Releases
+
+An annotated `vMAJOR.MINOR.PATCH` tag on a commit in `main` triggers the
+[release workflow](.github/workflows/release.yml). It requires the tag to match
+the version in `pom.xml`, verifies Java 17, 21, and 25, publishes the Maven
+package with source and Javadoc JARs to GitHub Packages, and creates a GitHub
+Release with the same artifacts. The workflow uses the repository's
+`GITHUB_TOKEN`; no personal token is needed for publishing from Actions.
+
+For the first release, push the committed version bump before tagging:
+
+```sh
+git tag -a v0.1.0 -m "Release 0.1.0"
+git push origin v0.1.0
+```
 
 ## Package layout
 
