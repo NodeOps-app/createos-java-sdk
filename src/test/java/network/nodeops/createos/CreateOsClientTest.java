@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import network.nodeops.createos.model.CreateSandboxRequest;
@@ -51,6 +52,26 @@ class CreateOsClientTest {
 
     assertTrue(response.up());
     assertEquals(null, apiKey.get());
+  }
+
+  @Test
+  void readsCreateOsApiKeyFromEnvironment() {
+    AtomicReference<String> apiKey = new AtomicReference<>();
+    server.createContext(
+        "/v1/whoami",
+        exchange -> {
+          apiKey.set(exchange.getRequestHeaders().getFirst("X-Api-Key"));
+          respond(exchange, 401, "{\"status\":\"error\",\"message\":\"test\"}");
+        });
+
+    CreateOsClient client =
+        new CreateOsClient.Builder(Map.of("CREATEOS_API_KEY", " env-secret "))
+            .baseUri(baseUri)
+            .withoutRetry()
+            .build();
+
+    assertThrows(ApiException.class, client::whoAmI);
+    assertEquals("env-secret", apiKey.get());
   }
 
   @Test

@@ -6,7 +6,7 @@ compiled during `mvn verify`, but are not included in the SDK JAR.
 Set your API key and compile everything first:
 
 ```sh
-export CREATEOS_SANDBOX_API_KEY="your-api-key"
+export CREATEOS_API_KEY="your-api-key"
 mvn verify
 ```
 

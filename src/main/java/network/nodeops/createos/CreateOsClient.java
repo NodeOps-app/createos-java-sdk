@@ -47,9 +47,12 @@ public final class CreateOsClient {
     this.disks = new DisksService(this);
   }
 
-  /** Creates a builder initialized from CreateOS environment variables. */
+  /**
+   * Creates a builder initialized from {@code CREATEOS_API_KEY} and {@code
+   * CREATEOS_SANDBOX_BASE_URL}.
+   */
   public static Builder builder() {
-    return new Builder();
+    return new Builder(System.getenv());
   }
 
   /** Returns the configured control-plane base URI. */
@@ -247,16 +250,19 @@ public final class CreateOsClient {
 
   /** Builder for a CreateOS client. */
   public static final class Builder {
-    private String apiKey = trimToNull(System.getenv("CREATEOS_SANDBOX_API_KEY"));
-    private URI baseUri = baseUriFromEnvironment();
+    private String apiKey;
+    private URI baseUri;
     private HttpClient httpClient =
         HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
-    private String userAgent = "createos-java-sdk/0.1.0";
+    private String userAgent = "createos-java-sdk/0.1.1-SNAPSHOT";
     private Duration timeout = Duration.ofSeconds(60);
     private RetryPolicy retryPolicy =
         new RetryPolicy(2, Duration.ofMillis(500), Duration.ofSeconds(30));
 
-    private Builder() {}
+    Builder(Map<String, String> environment) {
+      this.apiKey = trimToNull(environment.get("CREATEOS_API_KEY"));
+      this.baseUri = baseUriFromEnvironment(environment);
+    }
 
     /** Configures the API key. */
     public Builder apiKey(String apiKey) {
@@ -305,8 +311,8 @@ public final class CreateOsClient {
       return new CreateOsClient(this);
     }
 
-    private static URI baseUriFromEnvironment() {
-      String configured = System.getenv("CREATEOS_SANDBOX_BASE_URL");
+    private static URI baseUriFromEnvironment(Map<String, String> environment) {
+      String configured = environment.get("CREATEOS_SANDBOX_BASE_URL");
       return URI.create(
           configured == null || configured.isBlank()
               ? "https://api.sb.createos.sh"

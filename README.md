@@ -45,11 +45,11 @@ to read them from `~/.m2/settings.xml`:
 ```
 
 For local development from this checkout, run `mvn install` instead of
-configuring GitHub Packages.
+configuring GitHub Packages; it installs the current `0.1.1-SNAPSHOT` build.
 
 The compile-checked [hello-world example](examples/src/main/java/network/nodeops/createos/examples/helloworld/HelloWorld.java)
 creates a sandbox, runs a command, prints its output, and always destroys the
-resource:
+resource. Set `CREATEOS_API_KEY` in your environment before running it:
 
 ```java
 package network.nodeops.createos.examples.helloworld;
@@ -63,7 +63,8 @@ public final class HelloWorld {
   private HelloWorld() {}
 
   public static void main(String[] arguments) {
-    CreateOsClient client = CreateOsClient.builder().build();
+    CreateOsClient client =
+        CreateOsClient.builder().apiKey(System.getenv("CREATEOS_API_KEY")).build();
     Sandbox sandbox =
         client.createSandbox(
             CreateSandboxRequest.builder("s-4vcpu-4gb")
@@ -100,9 +101,9 @@ CreateOsClient client =
         .build();
 ```
 
-As an optional alternative, `CreateOsClient.builder().build()` reads
-`CREATEOS_SANDBOX_API_KEY`. `CREATEOS_SANDBOX_BASE_URL` overrides the default
-control-plane URL. Explicit builder values take precedence.
+In the next release, `CreateOsClient.builder().build()` will also read
+`CREATEOS_API_KEY` automatically. `CREATEOS_SANDBOX_BASE_URL` overrides the
+default control-plane URL. Explicit builder values take precedence.
 
 The SDK targets Java 17 and uses the JDK HTTP client. Public wire models are
 immutable records, API failures remain inspectable through `ApiException`, and
@@ -389,17 +390,30 @@ warnings; and builds source and Javadoc JARs.
 
 An annotated `vMAJOR.MINOR.PATCH` tag on a commit in `main` triggers the
 [release workflow](.github/workflows/release.yml). It requires the tag to match
-the version in `pom.xml`, verifies Java 17, 21, and 25, publishes the Maven
-package with source and Javadoc JARs to GitHub Packages, and creates a GitHub
-Release with the same artifacts. The workflow uses the repository's
-`GITHUB_TOKEN`; no personal token is needed for publishing from Actions.
+the version in `pom.xml`, verifies Java 17, 21, and 25, publishes signed SDK,
+source, and Javadoc JARs to Maven Central, then publishes to GitHub Packages
+and creates a GitHub Release. The workflow waits for Central to publish before
+continuing.
 
-For the first release, push the committed version bump before tagging:
+Before tagging, maintainers must verify the `network.nodeops` namespace in the
+[Central Publisher Portal](https://central.sonatype.org/register/namespace/)
+and configure four repository secrets: `CENTRAL_USERNAME` and
+`CENTRAL_PASSWORD` (the two parts of a [Central user token](https://central.sonatype.org/publish/generate-portal-token/)),
+plus `MAVEN_GPG_PRIVATE_KEY` (ASCII-armored private key) and
+`MAVEN_GPG_PASSPHRASE` for [artifact signing](https://central.sonatype.org/publish/requirements/gpg/).
+Do not put these values in the repository or this README. GitHub Packages still
+uses the workflow's `GITHUB_TOKEN`.
+
+Update `pom.xml` and `CHANGELOG.md`, push the passing commit to `main`, then
+push a new annotated version tag. Do not reuse the existing `v0.1.0` tag:
 
 ```sh
-git tag -a v0.1.0 -m "Release 0.1.0"
-git push origin v0.1.0
+git tag -a v0.1.1 -m "Release 0.1.1"
+git push origin v0.1.1
 ```
+
+Version `0.1.0` was published before Maven Central was configured and is not
+available there. Its GitHub Packages installation above still requires a token.
 
 ## Package layout
 

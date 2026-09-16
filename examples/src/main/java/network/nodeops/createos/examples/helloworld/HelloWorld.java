@@ -11,7 +11,8 @@ public final class HelloWorld {
 
   /** Runs the example. */
   public static void main(String[] arguments) {
-    CreateOsClient client = CreateOsClient.builder().build();
+    CreateOsClient client =
+        CreateOsClient.builder().apiKey(System.getenv("CREATEOS_API_KEY")).build();
     Sandbox sandbox =
         client.createSandbox(
             CreateSandboxRequest.builder("s-4vcpu-4gb").rootFileSystem("devbox:1").build());
