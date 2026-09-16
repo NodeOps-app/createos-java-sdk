@@ -43,6 +43,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
     <google-java-format.version>1.28.0</google-java-format.version>
+    <checkstyle.version>12.3.0</checkstyle.version>
     <jackson.version>2.18.2</jackson.version>
     <junit.version>5.11.4</junit.version>
     <project.build.outputTimestamp>2026-09-16T00:00:00Z</project.build.outputTimestamp>
@@ -200,7 +201,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>14.1.0</version>
+            <version>${checkstyle.version}</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -268,6 +269,7 @@
       </activation>
       <properties>
         <google-java-format.version>1.36.1</google-java-format.version>
+        <checkstyle.version>14.1.0</checkstyle.version>
       </properties>
     </profile>
   </profiles>
