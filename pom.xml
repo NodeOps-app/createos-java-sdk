@@ -42,6 +42,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
+    <google-java-format.version>1.28.0</google-java-format.version>
     <jackson.version>2.18.2</jackson.version>
     <junit.version>5.11.4</junit.version>
     <project.build.outputTimestamp>2026-09-16T00:00:00Z</project.build.outputTimestamp>
@@ -174,7 +175,7 @@
               <include>examples/**/*.java</include>
             </includes>
             <googleJavaFormat>
-              <version>1.30.0</version>
+              <version>${google-java-format.version}</version>
               <style>GOOGLE</style>
             </googleJavaFormat>
             <removeUnusedImports />
@@ -258,4 +259,16 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>modern-google-java-format</id>
+      <activation>
+        <jdk>[21,)</jdk>
+      </activation>
+      <properties>
+        <google-java-format.version>1.36.1</google-java-format.version>
+      </properties>
+    </profile>
+  </profiles>
 </project>
