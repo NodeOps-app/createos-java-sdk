@@ -268,16 +268,6 @@
 
   <profiles>
     <profile>
-      <id>github-packages</id>
-      <distributionManagement>
-        <repository>
-          <id>github</id>
-          <name>GitHub Packages</name>
-          <url>https://maven.pkg.github.com/NodeOps-app/createos-java-sdk</url>
-        </repository>
-      </distributionManagement>
-    </profile>
-    <profile>
       <id>central-release</id>
       <build>
         <plugins>

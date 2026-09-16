@@ -97,12 +97,11 @@ jobs:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
   publish:
-    name: Publish GitHub package and Release
+    name: Create GitHub Release
     needs: publish-central
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      packages: write
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-java@v6
@@ -110,13 +109,8 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: maven
-          server-id: github
-          server-username-env-var: GITHUB_ACTOR
-          server-password-env-var: GITHUB_TOKEN
-      - name: Publish to GitHub Packages
-        run: mvn --batch-mode --no-transfer-progress -Pgithub-packages deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build GitHub Release artifacts
+        run: mvn --batch-mode --no-transfer-progress verify
       - name: Create GitHub Release with built artifacts
         run: gh release create "$GITHUB_REF_NAME" target/*.jar --verify-tag --generate-notes --title "$GITHUB_REF_NAME"
         env:

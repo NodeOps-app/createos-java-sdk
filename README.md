@@ -5,47 +5,30 @@ open a preview URL, and tear everything down from Java.
 
 ## Your first sandbox
 
-Version [`0.1.0`](https://github.com/NodeOps-app/createos-java-sdk/releases/tag/v0.1.0)
-is published on GitHub Packages. Add the repository and dependency to your
-project's `pom.xml`:
+The first Maven Central release is being prepared. For now, install the public
+source checkout locally with Java 17+ and Maven 3.9+:
+
+```sh
+git clone https://github.com/NodeOps-app/createos-java-sdk.git
+cd createos-java-sdk
+mvn install
+```
+
+Then add the locally installed SDK to your project's `pom.xml`:
 
 ```xml
-<repositories>
-  <repository>
-    <id>github</id>
-    <url>https://maven.pkg.github.com/NodeOps-app/createos-java-sdk</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <dependency>
     <groupId>network.nodeops</groupId>
     <artifactId>createos-java-sdk</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1-SNAPSHOT</version>
   </dependency>
 </dependencies>
 ```
 
-GitHub Packages requires authentication to download Maven packages, including
-public packages. Set `GITHUB_USERNAME` to your GitHub username and
-`GITHUB_TOKEN` to a personal access token (classic) with `read:packages` in
-your environment or secret manager. Do not commit either value. Configure Maven
-to read them from `~/.m2/settings.xml`:
-
-```xml
-<settings>
-  <servers>
-    <server>
-      <id>github</id>
-      <username>${env.GITHUB_USERNAME}</username>
-      <password>${env.GITHUB_TOKEN}</password>
-    </server>
-  </servers>
-</settings>
-```
-
-For local development from this checkout, run `mvn install` instead of
-configuring GitHub Packages; it installs the current `0.1.1-SNAPSHOT` build.
+No package-download token or extra Maven repository is needed. Once Maven
+Central publishes a release, you can use its version in the dependency above
+without building from source.
 
 The compile-checked [hello-world example](examples/src/main/java/network/nodeops/createos/examples/helloworld/HelloWorld.java)
 creates a sandbox, runs a command, prints its output, and always destroys the
@@ -101,8 +84,8 @@ CreateOsClient client =
         .build();
 ```
 
-In the next release, `CreateOsClient.builder().build()` will also read
-`CREATEOS_API_KEY` automatically. `CREATEOS_SANDBOX_BASE_URL` overrides the
+`CreateOsClient.builder().build()` also reads `CREATEOS_API_KEY` automatically.
+`CREATEOS_SANDBOX_BASE_URL` overrides the
 default control-plane URL. Explicit builder values take precedence.
 
 The SDK targets Java 17 and uses the JDK HTTP client. Public wire models are
@@ -388,32 +371,9 @@ warnings; and builds source and Javadoc JARs.
 
 ## Releases
 
-An annotated `vMAJOR.MINOR.PATCH` tag on a commit in `main` triggers the
-[release workflow](.github/workflows/release.yml). It requires the tag to match
-the version in `pom.xml`, verifies Java 17, 21, and 25, publishes signed SDK,
-source, and Javadoc JARs to Maven Central, then publishes to GitHub Packages
-and creates a GitHub Release. The workflow waits for Central to publish before
-continuing.
-
-Before tagging, maintainers must verify the `network.nodeops` namespace in the
-[Central Publisher Portal](https://central.sonatype.org/register/namespace/)
-and configure four repository secrets: `CENTRAL_USERNAME` and
-`CENTRAL_PASSWORD` (the two parts of a [Central user token](https://central.sonatype.org/publish/generate-portal-token/)),
-plus `MAVEN_GPG_PRIVATE_KEY` (ASCII-armored private key) and
-`MAVEN_GPG_PASSPHRASE` for [artifact signing](https://central.sonatype.org/publish/requirements/gpg/).
-Do not put these values in the repository or this README. GitHub Packages still
-uses the workflow's `GITHUB_TOKEN`.
-
-Update `pom.xml` and `CHANGELOG.md`, push the passing commit to `main`, then
-push a new annotated version tag. Do not reuse the existing `v0.1.0` tag:
-
-```sh
-git tag -a v0.1.1 -m "Release 0.1.1"
-git push origin v0.1.1
-```
-
-Version `0.1.0` was published before Maven Central was configured and is not
-available there. Its GitHub Packages installation above still requires a token.
+Version [`0.1.0`](https://github.com/NodeOps-app/createos-java-sdk/releases/tag/v0.1.0)
+remains available as a GitHub Release, but its GitHub Maven package was removed.
+No Maven Central version is available yet.
 
 ## Package layout
 

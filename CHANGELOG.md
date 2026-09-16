@@ -9,8 +9,12 @@ Versioning and the Keep a Changelog structure.
 
 - Read the default API key from `CREATEOS_API_KEY` instead of
   `CREATEOS_SANDBOX_API_KEY`.
-- Prepare signed, tag-triggered Maven Central publishing before GitHub Packages
-  and GitHub Release publication.
+- Prepare signed, tag-triggered Maven Central publishing and GitHub Releases.
+
+### Removed
+
+- GitHub Packages publishing. The previously published `0.1.0` Maven package
+  was also deleted; the GitHub Release remains available.
 
 ## 0.1.0 - 2026-09-16
 
