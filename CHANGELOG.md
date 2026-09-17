@@ -3,7 +3,7 @@
 All notable changes will be documented here. This project follows Semantic
 Versioning and the Keep a Changelog structure.
 
-## Unreleased
+## 0.1.1 - 2026-09-17
 
 ### Fixed
 
