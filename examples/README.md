@@ -2,6 +2,8 @@
 
 These programs mirror the runnable examples in `createos-go-sdk`. They are
 compiled during `mvn verify`, but are not included in the SDK JAR.
+The SDK is [published on Maven Central](https://central.sonatype.com/artifact/sh.createos/createos-java-sdk);
+these examples compile against the source checkout.
 
 Set your API key and compile everything first:
 

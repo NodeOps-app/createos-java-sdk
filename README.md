@@ -5,29 +5,21 @@ open a preview URL, and tear everything down from Java.
 
 ## Your first sandbox
 
-Install the public source checkout locally with Java 17+ and Maven 3.9+:
-
-```sh
-git clone https://github.com/NodeOps-app/createos-java-sdk.git
-cd createos-java-sdk
-mvn install
-```
-
-Then add the locally installed SDK to your project's `pom.xml`. Replace
-`YOUR_INSTALLED_VERSION` with the version in the checkout's `pom.xml`:
+Add the [published SDK on Maven Central](https://central.sonatype.com/artifact/sh.createos/createos-java-sdk)
+to your project's `pom.xml`. Replace `YOUR_VERSION` with the current published
+version shown there:
 
 ```xml
 <dependencies>
   <dependency>
     <groupId>sh.createos</groupId>
     <artifactId>createos-java-sdk</artifactId>
-    <version>YOUR_INSTALLED_VERSION</version>
+    <version>YOUR_VERSION</version>
   </dependency>
 </dependencies>
 ```
 
-No package-download token or extra Maven repository is needed for the local
-installation.
+No package-download token or extra Maven repository is needed.
 
 The compile-checked [hello-world example](examples/src/main/java/sh/createos/examples/helloworld/HelloWorld.java)
 creates a sandbox, runs a command, prints its output, and always destroys the
