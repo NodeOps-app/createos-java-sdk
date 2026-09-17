@@ -3,6 +3,13 @@
 All notable changes will be documented here. This project follows Semantic
 Versioning and the Keep a Changelog structure.
 
+## Unreleased
+
+### Fixed
+
+- Detach network members before deleting the network in the example.
+- Allow more time to create a sandbox from a custom template in the example.
+
 ## 0.1.1 - 2026-09-17
 
 ### Fixed

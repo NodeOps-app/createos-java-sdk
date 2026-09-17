@@ -27,7 +27,7 @@ public final class CustomTemplate {
 
   /** Runs the example. */
   public static void main(String[] arguments) throws InterruptedException {
-    CreateOsClient client = CreateOsClient.builder().build();
+    CreateOsClient client = CreateOsClient.builder().timeout(Duration.ofMinutes(5)).build();
     Template template =
         client
             .templates()

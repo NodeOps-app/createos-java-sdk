@@ -15,11 +15,13 @@ public final class NetworkExample {
     CreateOsClient client = CreateOsClient.builder().build();
     Network network = client.networks().create("java-sdk-" + Instant.now().getEpochSecond());
     Sandbox sandbox = null;
+    boolean attached = false;
     try {
       sandbox =
           client.createSandbox(
               CreateSandboxRequest.builder("s-1vcpu-1gb").rootFileSystem("devbox:1").build());
       sandbox.attachNetwork(network.id());
+      attached = true;
       Network connected = client.networks().get(network.id());
       String sandboxId = sandbox.id();
       Network.Member member =
@@ -31,10 +33,19 @@ public final class NetworkExample {
           "verified member: sandbox=%s ip=%s status=%s%n",
           member.sandboxId(), member.ipAddress(), member.status());
     } finally {
-      if (sandbox != null) {
-        sandbox.destroy();
+      try {
+        if (sandbox != null && attached) {
+          sandbox.detachNetwork(network.id());
+        }
+      } finally {
+        try {
+          if (sandbox != null) {
+            sandbox.destroy();
+          }
+        } finally {
+          client.networks().delete(network.id());
+        }
       }
-      client.networks().delete(network.id());
     }
   }
 }
