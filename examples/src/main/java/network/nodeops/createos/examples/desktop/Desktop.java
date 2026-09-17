@@ -15,7 +15,7 @@ import network.nodeops.createos.model.ScreenshotOptions;
 
 /** Demonstrates screenshots, desktop controls, and a temporary noVNC connection. */
 public final class Desktop {
-  private static final String PRIMARY_SCREEN = "0";
+  private static final String PRIMARY_SCREEN = "screen-0";
 
   private Desktop() {}
 

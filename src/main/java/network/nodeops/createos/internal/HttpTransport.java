@@ -88,7 +88,10 @@ public final class HttpTransport {
       byte[] bytes = readResponseBody(response.statusCode(), input);
       requireSuccess(method, path, response, bytes);
       if (bytes.length == 0) {
-        return null;
+        if (response.statusCode() == 204 || response.statusCode() == 205) {
+          return null;
+        }
+        throw new IllegalStateException("Empty JSend envelope for " + method + " " + path);
       }
       JsendEnvelope envelope = objectMapper.readValue(bytes, JsendEnvelope.class);
       if (!"success".equals(envelope.status())) {

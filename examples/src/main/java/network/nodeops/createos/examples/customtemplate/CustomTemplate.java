@@ -2,7 +2,9 @@ package network.nodeops.createos.examples.customtemplate;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Map;
 import network.nodeops.createos.CreateOsClient;
+import network.nodeops.createos.RequestOptions;
 import network.nodeops.createos.Sandbox;
 import network.nodeops.createos.model.CreateSandboxRequest;
 import network.nodeops.createos.model.CreateTemplateRequest;
@@ -35,7 +37,13 @@ public final class CustomTemplate {
     Sandbox sandbox = null;
     try {
       System.out.println("template: " + template.id());
-      try (var logs = client.templates().followLogs(template.id(), 0)) {
+      try (var logs =
+          client
+              .templates()
+              .followLogs(
+                  template.id(),
+                  0,
+                  new RequestOptions(Map.of(), Duration.ofMinutes(10), null, true))) {
         for (var event = logs.receive(); event != null; event = logs.receive()) {
           if (event.line() != null && !event.line().isEmpty()) {
             System.out.println(event.line());

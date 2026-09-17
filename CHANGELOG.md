@@ -5,6 +5,13 @@ Versioning and the Keep a Changelog structure.
 
 ## Unreleased
 
+### Fixed
+
+- Reject empty HTTP 200 responses without a JSend envelope.
+- Update Jackson to 2.18.10 to include upstream security fixes.
+- Let template log followers override the request timeout for long builds.
+- Use the primary `screen-0` identifier in the desktop example.
+
 ### Changed
 
 - Read the default API key from `CREATEOS_API_KEY` instead of

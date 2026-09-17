@@ -94,6 +94,12 @@ public final class TemplatesService {
 
   /** Follows template build-log events. The returned stream must be closed. */
   public NdjsonStream<TemplateLogEvent> followLogs(String templateId, int attempt) {
+    return followLogs(templateId, attempt, RequestOptions.DEFAULT);
+  }
+
+  /** Follows build-log events with per-request transport options. */
+  public NdjsonStream<TemplateLogEvent> followLogs(
+      String templateId, int attempt, RequestOptions options) {
     Map<String, String> query = new HashMap<>();
     query.put("follow", "true");
     if (attempt > 0) {
@@ -108,7 +114,7 @@ public final class TemplatesService {
                 path,
                 query,
                 java.net.http.HttpRequest.BodyPublishers.noBody(),
-                new RequestOptions(Map.of(), null, null, true),
+                options,
                 false,
                 false);
     if (response.statusCode() < 200 || response.statusCode() >= 300) {

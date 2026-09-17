@@ -177,6 +177,17 @@ final class HttpTransportSecurityTest {
     assertEquals("not authorized", exception.getMessage());
   }
 
+  @Test
+  void emptySuccessResponseRequiresEnvelope() {
+    server.createContext("/empty", exchange -> respond(exchange, 200, ""));
+
+    assertThrows(
+        IllegalStateException.class,
+        () ->
+            transport("sdk-secret")
+                .send("GET", "/empty", Map.of(), null, RequestOptions.DEFAULT, false, Void.class));
+  }
+
   private HttpTransport transport(String apiKey) {
     return transportAt(baseUri, apiKey);
   }
