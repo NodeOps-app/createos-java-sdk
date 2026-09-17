@@ -22,7 +22,7 @@ java -cp "target/classes:target/example-classes:$(cat /tmp/createos-java-classpa
 
 Replace the final class with one of these:
 
-| Go example | Java main class |
+| Example | Java main class |
 | --- | --- |
 | `hello-world` | `sh.createos.examples.helloworld.HelloWorld` |
 | `command-streaming` | `sh.createos.examples.commandstreaming.CommandStreaming` |
@@ -37,5 +37,5 @@ Replace the final class with one of these:
 Examples create billable resources. Their `finally` blocks make a best effort
 to destroy sandboxes and delete temporary account resources.
 
-See [execution-server/README.md](execution-server/README.md) for the HTTP API
+See [execution server README](src/main/java/sh/createos/examples/executionserver/README.md) for the HTTP API
 request format and security considerations for that example.

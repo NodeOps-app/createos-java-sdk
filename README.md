@@ -341,15 +341,15 @@ Runnable examples live under [`examples/`](examples/). Every example listed
 here is compiled during `mvn verify`, checked with Google Java style, and
 validated by `ExamplesDocumentationTest`:
 
-- [Hello world](examples/src/main/java/sh/createos/examples/helloworld/HelloWorld.java)
-- [HTTP execution server](examples/src/main/java/sh/createos/examples/executionserver/ExecutionServer.java)
-- [Command streaming](examples/src/main/java/sh/createos/examples/commandstreaming/CommandStreaming.java)
-- [Files and snapshots](examples/src/main/java/sh/createos/examples/filesandsnapshots/FilesAndSnapshots.java)
-- [Ingress preview](examples/src/main/java/sh/createos/examples/ingresspreview/IngressPreview.java)
-- [Private overlay network](examples/src/main/java/sh/createos/examples/network/NetworkExample.java)
-- [Custom template](examples/src/main/java/sh/createos/examples/customtemplate/CustomTemplate.java)
-- [Managed process lifecycle](examples/src/main/java/sh/createos/examples/managedprocess/ManagedProcessExample.java)
-- [Desktop and noVNC](examples/src/main/java/sh/createos/examples/desktop/Desktop.java)
+- [Hello world](examples/src/main/java/sh/createos/examples/helloworld/README.md)
+- [HTTP execution server](examples/src/main/java/sh/createos/examples/executionserver/README.md)
+- [Command streaming](examples/src/main/java/sh/createos/examples/commandstreaming/README.md)
+- [Files and snapshots](examples/src/main/java/sh/createos/examples/filesandsnapshots/README.md)
+- [Ingress preview](examples/src/main/java/sh/createos/examples/ingresspreview/README.md)
+- [Private overlay network](examples/src/main/java/sh/createos/examples/network/README.md)
+- [Custom template](examples/src/main/java/sh/createos/examples/customtemplate/README.md)
+- [Managed process lifecycle](examples/src/main/java/sh/createos/examples/managedprocess/README.md)
+- [Desktop and noVNC](examples/src/main/java/sh/createos/examples/desktop/README.md)
 
 Run commands are documented in the [examples index](examples/README.md).
 Examples are compiled into `target/example-classes` and excluded from the SDK

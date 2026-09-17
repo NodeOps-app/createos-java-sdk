@@ -34,8 +34,11 @@ final class ExamplesDocumentationTest {
             new java.net.URL[] {exampleClasses.toUri().toURL()}, getClass().getClassLoader())) {
       for (Example example : EXAMPLES) {
         assertTrue(
-            readme.contains("(" + example.source() + ")"),
-            () -> "README does not link " + example.source());
+            readme.contains("(" + example.readme() + ")"),
+            () -> "README does not link " + example.readme());
+        assertTrue(
+            Files.isRegularFile(project.resolve(example.readme())),
+            () -> "example README is missing: " + example.readme());
         assertTrue(
             Files.isRegularFile(project.resolve(example.source())),
             () -> "example source is missing: " + example.source());
@@ -49,8 +52,9 @@ final class ExamplesDocumentationTest {
   private static Example example(String packageName, String simpleName) {
     String className = "sh.createos.examples." + packageName + "." + simpleName;
     String source = "examples/src/main/java/" + className.replace('.', '/') + ".java";
-    return new Example(source, className);
+    String readme = source.substring(0, source.lastIndexOf('/') + 1) + "README.md";
+    return new Example(source, readme, className);
   }
 
-  private record Example(String source, String className) {}
+  private record Example(String source, String readme, String className) {}
 }

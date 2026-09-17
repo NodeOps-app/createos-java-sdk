@@ -3,9 +3,10 @@
 This example exposes `POST /v1/execute` on `127.0.0.1:8080`. Each request
 creates a fresh sandbox, runs one command without shell interpolation, returns
 its output as JSON, and destroys the sandbox.
+See [ExecutionServer.java](ExecutionServer.java) for the code.
 
 Run `sh.createos.examples.executionserver.ExecutionServer` as
-described in the examples index, then send a request:
+described in the [examples index](../../../../../../../README.md), then send a request:
 
 ```sh
 curl --fail-with-body http://127.0.0.1:8080/v1/execute \
