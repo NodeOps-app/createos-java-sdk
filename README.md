@@ -5,8 +5,7 @@ open a preview URL, and tear everything down from Java.
 
 ## Your first sandbox
 
-The first Maven Central release is being prepared. For now, install the public
-source checkout locally with Java 17+ and Maven 3.9+:
+Install the public source checkout locally with Java 17+ and Maven 3.9+:
 
 ```sh
 git clone https://github.com/NodeOps-app/createos-java-sdk.git
@@ -14,21 +13,21 @@ cd createos-java-sdk
 mvn install
 ```
 
-Then add the locally installed SDK to your project's `pom.xml`:
+Then add the locally installed SDK to your project's `pom.xml`. Replace
+`YOUR_INSTALLED_VERSION` with the version in the checkout's `pom.xml`:
 
 ```xml
 <dependencies>
   <dependency>
     <groupId>network.nodeops</groupId>
     <artifactId>createos-java-sdk</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>YOUR_INSTALLED_VERSION</version>
   </dependency>
 </dependencies>
 ```
 
-No package-download token or extra Maven repository is needed. Once Maven
-Central publishes a release, you can use its version in the dependency above
-without building from source.
+No package-download token or extra Maven repository is needed for the local
+installation.
 
 The compile-checked [hello-world example](examples/src/main/java/network/nodeops/createos/examples/helloworld/HelloWorld.java)
 creates a sandbox, runs a command, prints its output, and always destroys the
@@ -111,8 +110,8 @@ the build enforces the [Google Java Style Guide](https://google.github.io/styleg
 ### SDKs
 
 - [TypeScript](https://github.com/NodeOps-app/createos-sandbox-sdk)
-- [Python](https://github.com/NodeOps-app/createos-python-sdk)
 - [Go](https://github.com/NodeOps-app/createos-go-sdk)
+- [Python](https://github.com/NodeOps-app/createos-python-sdk)
 - [C#](https://github.com/NodeOps-app/createos-csharp-sdk)
 - [Java](https://github.com/NodeOps-app/createos-java-sdk)
 - [Rust](https://github.com/NodeOps-app/createos-rust-sdk)
@@ -313,6 +312,20 @@ The `Sandbox` handle caches the latest server projection safely. Lifecycle
 mutations and `refresh()` update it, while `id()`, `name()`, `status()`,
 `ipAddress()`, and `data()` provide thread-safe reads.
 
+## Build reusable templates
+
+Build a sandbox root filesystem from a Dockerfile, follow its build logs, and
+wait until the template is ready before creating a sandbox from its ID. See the
+[custom template example](examples/src/main/java/network/nodeops/createos/examples/customtemplate/CustomTemplate.java)
+for the complete workflow and cleanup.
+
+## Automate a desktop
+
+The desktop root filesystem supports screenshots, mouse and keyboard control,
+clipboard access, and temporary noVNC connections. The
+[desktop example](examples/src/main/java/network/nodeops/createos/examples/desktop/Desktop.java)
+exercises these operations.
+
 ## Errors stay inspectable
 
 ```java
@@ -368,12 +381,6 @@ examples.
 CI compiles the SDK and every example on Java 17, 21, and 25; runs JUnit and
 the coverage gate; verifies Google Java formatting; requires zero Checkstyle
 warnings; and builds source and Javadoc JARs.
-
-## Releases
-
-Version [`0.1.0`](https://github.com/NodeOps-app/createos-java-sdk/releases/tag/v0.1.0)
-remains available as a GitHub Release, but its GitHub Maven package was removed.
-No Maven Central version is available yet.
 
 ## Package layout
 
