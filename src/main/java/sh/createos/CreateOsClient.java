@@ -254,7 +254,7 @@ public final class CreateOsClient {
     private URI baseUri;
     private HttpClient httpClient =
         HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NEVER).build();
-    private String userAgent = "createos-java-sdk/0.2.0";
+    private String userAgent = "createos-java-sdk/0.1.2";
     private Duration timeout = Duration.ofSeconds(60);
     private RetryPolicy retryPolicy =
         new RetryPolicy(2, Duration.ofMillis(500), Duration.ofSeconds(30));

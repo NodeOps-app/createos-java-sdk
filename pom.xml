@@ -6,7 +6,7 @@
 
   <groupId>sh.createos</groupId>
   <artifactId>createos-java-sdk</artifactId>
-  <version>0.2.0</version>
+  <version>0.1.2</version>
   <name>CreateOS Java SDK</name>
   <description>Java SDK for CreateOS Sandbox</description>
   <url>https://github.com/NodeOps-app/createos-java-sdk</url>
