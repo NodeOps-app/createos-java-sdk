@@ -5,6 +5,11 @@ Versioning and the Keep a Changelog structure.
 
 ## Unreleased
 
+### Fixed
+
+- Redact plaintext sandbox access tokens from response `toString()` output to
+  prevent accidental disclosure in logs.
+
 ### Changed
 
 - Set the next Maven version and default user agent to `0.1.2`.
