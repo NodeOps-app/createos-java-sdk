@@ -5,6 +5,10 @@ Versioning and the Keep a Changelog structure.
 
 ## Unreleased
 
+### Changed
+
+- Set the next Maven version and default user agent to `0.1.2`.
+
 ### Added
 
 - Delegated sandbox access token lifecycle methods and a separate token scoped

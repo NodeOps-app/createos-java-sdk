@@ -19,9 +19,9 @@ import sh.createos.model.PaginationOptions;
 import sh.createos.model.ResizeSandboxResponse;
 import sh.createos.model.RunCommandRequest;
 import sh.createos.model.RunCommandResponse;
-import sh.createos.model.SandboxData;
 import sh.createos.model.SandboxAccessTokenCreateResponse;
 import sh.createos.model.SandboxAccessTokenMetadata;
+import sh.createos.model.SandboxData;
 import sh.createos.model.SandboxDisk;
 import sh.createos.model.SandboxStatus;
 
@@ -98,26 +98,50 @@ public final class Sandbox {
 
   /** Creates a delegated token and returns its plaintext value once. */
   public SandboxAccessTokenCreateResponse createAccessToken() {
-    return transport.send("POST", path("/access-token"), Map.of(), null,
-        RequestOptions.DEFAULT, false, SandboxAccessTokenCreateResponse.class);
+    return transport.send(
+        "POST",
+        path("/access-token"),
+        Map.of(),
+        null,
+        RequestOptions.DEFAULT,
+        false,
+        SandboxAccessTokenCreateResponse.class);
   }
 
   /** Returns delegated token state and its redacted hint. */
   public SandboxAccessTokenMetadata getAccessToken() {
-    return transport.send("GET", path("/access-token"), Map.of(), null,
-        RequestOptions.DEFAULT, false, SandboxAccessTokenMetadata.class);
+    return transport.send(
+        "GET",
+        path("/access-token"),
+        Map.of(),
+        null,
+        RequestOptions.DEFAULT,
+        false,
+        SandboxAccessTokenMetadata.class);
   }
 
   /** Replaces the current delegated token and returns its new plaintext value. */
   public SandboxAccessTokenCreateResponse rotateAccessToken() {
-    return transport.send("POST", path("/access-token/rotate"), Map.of(), null,
-        RequestOptions.DEFAULT, false, SandboxAccessTokenCreateResponse.class);
+    return transport.send(
+        "POST",
+        path("/access-token/rotate"),
+        Map.of(),
+        null,
+        RequestOptions.DEFAULT,
+        false,
+        SandboxAccessTokenCreateResponse.class);
   }
 
   /** Revokes the current delegated token, if present. */
   public SandboxAccessTokenMetadata disableAccessToken() {
-    return transport.send("DELETE", path("/access-token"), Map.of(), null,
-        RequestOptions.DEFAULT, false, SandboxAccessTokenMetadata.class);
+    return transport.send(
+        "DELETE",
+        path("/access-token"),
+        Map.of(),
+        null,
+        RequestOptions.DEFAULT,
+        false,
+        SandboxAccessTokenMetadata.class);
   }
 
   /** Refreshes this handle from the control plane. */

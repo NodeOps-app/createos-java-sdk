@@ -177,49 +177,80 @@ class CreateOsClientTest {
   @Test
   void sandboxAccessTokenLifecycleUsesOwnerAndDelegatedCredentials() {
     AtomicInteger step = new AtomicInteger();
-    server.createContext("/v1/sandboxes/sb-1", exchange -> {
-      int index = step.getAndIncrement();
-      String key = exchange.getRequestHeaders().getFirst("X-Api-Key");
-      String path = exchange.getRequestURI().getPath();
-      String method = exchange.getRequestMethod();
-      if (index == 0) {
-        assertEquals("GET", method);
-        assertEquals("secret", key);
-        respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"id\":\"sb-1\",\"status\":\"running\"}}");
-      } else if (index == 1) {
-        assertEquals("POST", method);
-        assertEquals("/v1/sandboxes/sb-1/access-token", path);
-        assertEquals("secret", key);
-        respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"token\":\"skp_sb_first\",\"enabled\":true,\"created_at\":\"2026-09-18T10:00:00Z\"}}");
-      } else if (index == 2) {
-        assertEquals("GET", method);
-        assertEquals("/v1/sandboxes/sb-1/access-token", path);
-        assertEquals("secret", key);
-        respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"enabled\":true,\"token_hint\":\"skp_sb...irst\"}}");
-      } else if (index == 3) {
-        assertEquals("POST", method);
-        assertEquals("/v1/sandboxes/sb-1/exec", path);
-        assertEquals("skp_sb_first", key);
-        respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"result\":{\"stdout\":\"hello\\n\",\"stderr\":\"\",\"exit_code\":0},\"exec_ms\":1}}");
-      } else if (index == 4) {
-        assertEquals("POST", method);
-        assertEquals("/v1/sandboxes/sb-1/access-token/rotate", path);
-        assertEquals("secret", key);
-        respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"token\":\"skp_sb_second\",\"enabled\":true,\"created_at\":\"2026-09-18T10:00:00Z\",\"rotated_at\":\"2026-09-18T11:00:00Z\"}}");
-      } else {
-        assertEquals("DELETE", method);
-        assertEquals("/v1/sandboxes/sb-1/access-token", path);
-        assertEquals("secret", key);
-        respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"enabled\":false}}");
-      }
-    });
+    server.createContext(
+        "/v1/sandboxes/sb-1",
+        exchange -> {
+          int index = step.getAndIncrement();
+          String key = exchange.getRequestHeaders().getFirst("X-Api-Key");
+          String path = exchange.getRequestURI().getPath();
+          String method = exchange.getRequestMethod();
+          if (index == 0) {
+            assertEquals("GET", method);
+            assertEquals("secret", key);
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{\"id\":\"sb-1\",\"status\":\"running\"}}");
+          } else if (index == 1) {
+            assertEquals("POST", method);
+            assertEquals("/v1/sandboxes/sb-1/access-token", path);
+            assertEquals("secret", key);
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{"
+                    + "\"token\":\"skp_sb_first\",\"enabled\":true,"
+                    + "\"created_at\":\"2026-09-18T10:00:00Z\"}}");
+          } else if (index == 2) {
+            assertEquals("GET", method);
+            assertEquals("/v1/sandboxes/sb-1/access-token", path);
+            assertEquals("secret", key);
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{"
+                    + "\"enabled\":true,\"token_hint\":\"skp_sb...irst\"}}");
+          } else if (index == 3) {
+            assertEquals("POST", method);
+            assertEquals("/v1/sandboxes/sb-1/exec", path);
+            assertEquals("skp_sb_first", key);
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{"
+                    + "\"result\":{\"stdout\":\"hello\\n\",\"stderr\":\"\","
+                    + "\"exit_code\":0},\"exec_ms\":1}}");
+          } else if (index == 4) {
+            assertEquals("POST", method);
+            assertEquals("/v1/sandboxes/sb-1/access-token/rotate", path);
+            assertEquals("secret", key);
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{"
+                    + "\"token\":\"skp_sb_second\",\"enabled\":true,"
+                    + "\"created_at\":\"2026-09-18T10:00:00Z\","
+                    + "\"rotated_at\":\"2026-09-18T11:00:00Z\"}}");
+          } else {
+            assertEquals("DELETE", method);
+            assertEquals("/v1/sandboxes/sb-1/access-token", path);
+            assertEquals("secret", key);
+            respond(exchange, 200, "{\"status\":\"success\",\"data\":{\"enabled\":false}}");
+          }
+        });
     Sandbox owner = client().getSandbox("sb-1");
     var created = owner.createAccessToken();
     assertEquals("skp_sb_first", created.token());
     assertEquals("skp_sb...irst", owner.getAccessToken().tokenHint());
     Sandbox worker = owner.withAccessToken(created.token());
-    assertEquals("hello\n", worker.runCommand(sh.createos.model.RunCommandRequest.of("echo", "hello")).result().standardOutput());
-    assertEquals(11, owner.rotateAccessToken().rotatedAt().atOffset(java.time.ZoneOffset.UTC).getHour());
+    assertEquals(
+        "hello\n",
+        worker
+            .runCommand(sh.createos.model.RunCommandRequest.of("echo", "hello"))
+            .result()
+            .standardOutput());
+    assertEquals(
+        11, owner.rotateAccessToken().rotatedAt().atOffset(java.time.ZoneOffset.UTC).getHour());
     assertFalse(owner.disableAccessToken().enabled());
     assertEquals(6, step.get());
     assertThrows(IllegalArgumentException.class, () -> owner.withAccessToken("  "));
