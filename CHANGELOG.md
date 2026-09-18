@@ -5,6 +5,11 @@ Versioning and the Keep a Changelog structure.
 
 ## Unreleased
 
+### Added
+
+- Delegated sandbox access token lifecycle methods and a separate token scoped
+  sandbox handle.
+
 ### Fixed
 
 - Detach network members before deleting the network in the example.

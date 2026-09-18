@@ -73,6 +73,11 @@ public final class HttpTransport {
     return objectMapper;
   }
 
+  /** Copies connection settings while using a separate API credential. */
+  public HttpTransport withApiKey(String credential) {
+    return new HttpTransport(baseUri, credential, httpClient, userAgent, timeout, retryPolicy);
+  }
+
   /** Sends a JSON request and unwraps its JSend response. */
   public <T> T send(
       String method,

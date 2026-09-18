@@ -83,6 +83,27 @@ The SDK targets Java 17 and uses the JDK HTTP client. Public wire models are
 immutable records, API failures remain inspectable through `ApiException`, and
 the build enforces the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
+## Delegate access to one sandbox
+
+An owner can create one delegated token for a sandbox. Plaintext is returned
+only on creation or rotation; inspection provides a redacted hint.
+
+```java
+var created = sandbox.createAccessToken();
+Sandbox worker = sandbox.withAccessToken(created.token());
+var result = worker.runCommand(RunCommandRequest.of("echo", "hello"));
+var metadata = sandbox.getAccessToken();
+var replacement = sandbox.rotateAccessToken();
+sandbox.disableAccessToken();
+```
+
+Use the owner's handle for token management. The delegated handle can operate
+its bound sandbox, including commands, files, processes, computer use, pause,
+resume, and destroy; it cannot manage tokens or account resources. Creating
+another enabled token returns HTTP 409; rotation requires an existing token.
+Disabling is idempotent. Revocation is immediate in the home region and
+propagates asynchronously to peer regions.
+
 ## Documentation
 
 - [CreateOS Sandbox overview](https://nodeops.network/createos/docs/Sandbox/Overview)
