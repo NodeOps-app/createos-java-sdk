@@ -8,4 +8,9 @@ public record SandboxAccessTokenCreateResponse(
     String token,
     boolean enabled,
     @JsonProperty("created_at") Instant createdAt,
-    @JsonProperty("rotated_at") Instant rotatedAt) {}
+    @JsonProperty("rotated_at") Instant rotatedAt) {
+  @Override
+  public String toString() {
+    return "SandboxAccessTokenCreateResponse[token=[REDACTED], enabled=" + enabled + "]";
+  }
+}

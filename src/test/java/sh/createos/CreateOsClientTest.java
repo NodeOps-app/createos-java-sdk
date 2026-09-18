@@ -241,6 +241,7 @@ class CreateOsClientTest {
     Sandbox owner = client().getSandbox("sb-1");
     var created = owner.createAccessToken();
     assertEquals("skp_sb_first", created.token());
+    assertFalse(created.toString().contains(created.token()));
     assertEquals("skp_sb...irst", owner.getAccessToken().tokenHint());
     Sandbox worker = owner.withAccessToken(created.token());
     assertEquals(
