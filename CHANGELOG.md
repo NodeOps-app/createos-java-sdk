@@ -13,6 +13,9 @@ Versioning and the Keep a Changelog structure.
 ### Changed
 
 - Set the next Maven version and default user agent to `0.1.2`.
+- Bump build/CI toolchain: Jackson, JUnit Jupiter, Maven compiler/surefire/deploy
+  plugins, GitHub Actions, and the Java version matrix (adds JDK 26) to their
+  latest stable releases.
 
 ### Added
 

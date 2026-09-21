@@ -44,8 +44,8 @@
     <maven.compiler.release>17</maven.compiler.release>
     <google-java-format.version>1.28.0</google-java-format.version>
     <checkstyle.version>12.3.0</checkstyle.version>
-    <jackson.version>2.18.10</jackson.version>
-    <junit.version>5.11.4</junit.version>
+    <jackson.version>2.22.2</jackson.version>
+    <junit.version>5.14.4</junit.version>
     <project.build.outputTimestamp>2026-09-16T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
@@ -73,7 +73,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.0</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -104,7 +104,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
+        <version>3.16.0</version>
         <configuration>
           <release>${maven.compiler.release}</release>
           <parameters>true</parameters>
@@ -128,7 +128,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.2</version>
+        <version>3.6.0</version>
         <configuration>
           <useModulePath>false</useModulePath>
         </configuration>
