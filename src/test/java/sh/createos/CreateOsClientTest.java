@@ -10,6 +10,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ class CreateOsClientTest {
               exchange,
               200,
               """
-              {"status":"success","data":{"id":"sb-1","status":"running","ip":"10.0.0.2","shape":"s-4vcpu-4gb","rootfs":"devbox:1","vcpu":4,"mem_mib":4096,"disk_mib":8192,"spawn_ms":42.5,"egress":[],"ingress_url_template":"https://<port>.example.test"}}
+              {"status":"success","data":{"id":"sb-1","status":"running","labels":{"team":"backend"},"ip":"10.0.0.2","shape":"s-4vcpu-4gb","rootfs":"devbox:1","vcpu":4,"mem_mib":4096,"disk_mib":8192,"spawn_ms":42.5,"egress":[],"ingress_url_template":"https://<port>.example.test"}}
               """);
         });
 
@@ -97,6 +98,7 @@ class CreateOsClientTest {
             .createSandbox(
                 CreateSandboxRequest.builder("s-4vcpu-4gb")
                     .rootFileSystem("devbox:1")
+                    .labels(Map.of("team", "backend"))
                     .ingressEnabled(true)
                     .build());
 
@@ -104,6 +106,8 @@ class CreateOsClientTest {
     assertEquals("secret", apiKey.get());
     assertTrue(requestBody.get().contains("\"rootfs\":\"devbox:1\""));
     assertTrue(requestBody.get().contains("\"ingress_enabled\":true"));
+    assertTrue(requestBody.get().contains("\"labels\":{\"team\":\"backend\"}"));
+    assertEquals(Map.of("team", "backend"), sandbox.labels());
     assertFalse(requestBody.get().contains("disk_mib"));
   }
 
@@ -132,6 +136,10 @@ class CreateOsClientTest {
     server.createContext(
         "/v1/sandboxes",
         exchange -> {
+          String decodedQuery =
+              URLDecoder.decode(exchange.getRequestURI().getRawQuery(), StandardCharsets.UTF_8);
+          assertTrue(decodedQuery.contains("\"environment\":\"test\""));
+          assertTrue(decodedQuery.contains("\"team\":\"backend\""));
           int offset = exchange.getRequestURI().getQuery().contains("offset=1") ? 1 : 0;
           requests.incrementAndGet();
           String status = offset == 0 ? "running" : "paused";
@@ -147,10 +155,45 @@ class CreateOsClientTest {
                   + ",\"count\":1}}}");
         });
 
-    List<Sandbox> sandboxes = client().listSandboxes(sh.createos.model.ListSandboxesOptions.ALL);
+    List<Sandbox> sandboxes =
+        client()
+            .listSandboxes(
+                new sh.createos.model.ListSandboxesOptions(
+                    0, null, Map.of("team", "backend", "environment", "test")));
 
     assertEquals(List.of("sb-1", "sb-2"), sandboxes.stream().map(Sandbox::id).toList());
     assertEquals(2, requests.get());
+  }
+
+  @Test
+  void patchesLabelsAndUpdatesCachedState() {
+    AtomicInteger calls = new AtomicInteger();
+    server.createContext(
+        "/v1/sandboxes/sb-1",
+        exchange -> {
+          if (calls.getAndIncrement() == 0) {
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{\"id\":\"sb-1\",\"status\":\"running\"}}");
+            return;
+          }
+          assertEquals("PATCH", exchange.getRequestMethod());
+          String body =
+              new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+          assertTrue(body.contains("\"labels\":{\"team\":\"platform\"}"));
+          respond(
+              exchange,
+              200,
+              "{\"status\":\"success\",\"data\":{\"id\":\"sb-1\","
+                  + "\"status\":\"running\",\"labels\":{\"environment\":\"test\","
+                  + "\"team\":\"platform\"}}}");
+        });
+
+    Sandbox sandbox = client().getSandbox("sb-1");
+    sandbox.setLabels(Map.of("team", "platform"));
+
+    assertEquals(Map.of("environment", "test", "team", "platform"), sandbox.labels());
   }
 
   @Test

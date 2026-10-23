@@ -83,6 +83,24 @@ The SDK targets Java 17 and uses the JDK HTTP client. Public wire models are
 immutable records, API failures remain inspectable through `ApiException`, and
 the build enforces the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html).
 
+## Organize sandboxes with labels
+
+```java
+Sandbox sandbox = client.createSandbox(
+    CreateSandboxRequest.builder("s-1vcpu-1gb")
+        .rootFileSystem("alpine:3.20")
+        .labels(Map.of("team", "backend", "environment", "test"))
+        .build());
+
+List<Sandbox> matches = client.listSandboxes(
+    new ListSandboxesOptions(0, null, Map.of("team", "backend")));
+
+sandbox.setLabels(Map.of("environment", "production"));
+```
+
+List filters use AND semantics. `setLabels()` merges the supplied keys into the
+existing label map.
+
 ## Delegate access to one sandbox
 
 An owner can create one delegated token for a sandbox. Plaintext is returned
