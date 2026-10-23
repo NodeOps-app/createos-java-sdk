@@ -88,6 +88,7 @@ the build enforces the [Google Java Style Guide](https://google.github.io/styleg
 ```java
 Sandbox sandbox = client.createSandbox(
     CreateSandboxRequest.builder("s-1vcpu-1gb")
+        .rootFileSystem("alpine:3.20")
         .labels(Map.of("team", "backend", "environment", "test"))
         .build());
 
