@@ -22,7 +22,8 @@ public record CreateSandboxRequest(
     @JsonProperty("ingress_enabled") Boolean ingressEnabled,
     List<DiskAttachment> disks,
     String region,
-    @JsonProperty("auto_pause_after_seconds") Integer autoPauseAfterSeconds) {
+    @JsonProperty("auto_pause_after_seconds") Integer autoPauseAfterSeconds,
+    Map<String, String> labels) {
   /** Validates required values and defensively copies collection values. */
   public CreateSandboxRequest {
     shape = Objects.requireNonNull(shape, "shape");
@@ -36,6 +37,41 @@ public record CreateSandboxRequest(
     sshPublicKeys = sshPublicKeys == null ? List.of() : List.copyOf(sshPublicKeys);
     nodeSelector = nodeSelector == null ? Map.of() : Map.copyOf(nodeSelector);
     disks = disks == null ? List.of() : List.copyOf(disks);
+    labels = labels == null ? Map.of() : Map.copyOf(labels);
+  }
+
+  /** Creates a request without labels, preserving the pre-labels constructor. */
+  public CreateSandboxRequest(
+      String shape,
+      String rootFileSystem,
+      String name,
+      List<NetworkEntry> networks,
+      Long diskMib,
+      List<String> egressRules,
+      Map<String, String> environmentVariables,
+      List<String> sshPublicKeys,
+      String hostId,
+      Map<String, String> nodeSelector,
+      Boolean ingressEnabled,
+      List<DiskAttachment> disks,
+      String region,
+      Integer autoPauseAfterSeconds) {
+    this(
+        shape,
+        rootFileSystem,
+        name,
+        networks,
+        diskMib,
+        egressRules,
+        environmentVariables,
+        sshPublicKeys,
+        hostId,
+        nodeSelector,
+        ingressEnabled,
+        disks,
+        region,
+        autoPauseAfterSeconds,
+        Map.of());
   }
 
   /** Returns a builder requiring the sandbox shape. */
@@ -59,6 +95,7 @@ public record CreateSandboxRequest(
     private List<DiskAttachment> disks = List.of();
     private String region;
     private Integer autoPauseAfterSeconds;
+    private Map<String, String> labels = Map.of();
 
     private Builder(String shape) {
       this.shape = shape;
@@ -73,6 +110,12 @@ public record CreateSandboxRequest(
     /** Sets the human-readable sandbox name. */
     public Builder name(String name) {
       this.name = name;
+      return this;
+    }
+
+    /** Sets user-defined metadata used to organize and filter sandboxes. */
+    public Builder labels(Map<String, String> labels) {
+      this.labels = labels;
       return this;
     }
 
@@ -158,7 +201,8 @@ public record CreateSandboxRequest(
           ingressEnabled,
           disks,
           region,
-          autoPauseAfterSeconds);
+          autoPauseAfterSeconds,
+          labels);
     }
   }
 }

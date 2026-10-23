@@ -3,6 +3,7 @@ package sh.createos.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.Map;
 
 /** Resolved placement and boot timing returned when a sandbox is created. */
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -19,4 +20,42 @@ public record CreateSandboxResponse(
     @JsonProperty("spawn_ms") double spawnMilliseconds,
     @JsonProperty("egress") List<String> egressRules,
     @JsonProperty("bandwidth_quota_bytes") long bandwidthQuotaBytes,
-    @JsonProperty("ingress_url_template") String ingressUrlTemplate) {}
+    @JsonProperty("ingress_url_template") String ingressUrlTemplate,
+    Map<String, String> labels) {
+  /** Normalizes missing labels and keeps the response immutable. */
+  public CreateSandboxResponse {
+    labels = labels == null ? Map.of() : Map.copyOf(labels);
+  }
+
+  /** Creates a response without labels, preserving the pre-labels constructor. */
+  public CreateSandboxResponse(
+      String id,
+      SandboxStatus status,
+      String name,
+      String ipAddress,
+      String shape,
+      String rootFileSystem,
+      int virtualCpu,
+      int memoryMib,
+      long diskMib,
+      double spawnMilliseconds,
+      List<String> egressRules,
+      long bandwidthQuotaBytes,
+      String ingressUrlTemplate) {
+    this(
+        id,
+        status,
+        name,
+        ipAddress,
+        shape,
+        rootFileSystem,
+        virtualCpu,
+        memoryMib,
+        diskMib,
+        spawnMilliseconds,
+        egressRules,
+        bandwidthQuotaBytes,
+        ingressUrlTemplate,
+        Map.of());
+  }
+}

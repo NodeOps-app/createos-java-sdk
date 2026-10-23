@@ -63,6 +63,11 @@ public final class Sandbox {
     return data().ipAddress();
   }
 
+  /** Returns the last observed user-defined labels. */
+  public Map<String, String> labels() {
+    return data().labels();
+  }
+
   /** Returns the latest immutable server projection. */
   public SandboxData data() {
     lock.readLock().lock();
@@ -213,6 +218,19 @@ public final class Sandbox {
             path(""),
             Map.of(),
             Map.of("ingress_enabled", enabled),
+            RequestOptions.DEFAULT,
+            false,
+            SandboxData.class));
+  }
+
+  /** Merges labels into the sandbox's existing labels. */
+  public void setLabels(Map<String, String> labels) {
+    update(
+        transport.send(
+            "PATCH",
+            path(""),
+            Map.of(),
+            Map.of("labels", Map.copyOf(labels)),
             RequestOptions.DEFAULT,
             false,
             SandboxData.class));
@@ -575,7 +593,8 @@ public final class Sandbox {
         source.pausedAt(),
         source.lastResumedAt(),
         source.forkedFrom(),
-        source.autoPauseAfterSeconds());
+        source.autoPauseAfterSeconds(),
+        source.labels());
   }
 
   private record DestroyedResponse(String id, SandboxStatus status) {}

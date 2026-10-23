@@ -158,7 +158,8 @@ public final class CreateOsClient {
             null,
             null,
             null,
-            request.autoPauseAfterSeconds());
+            request.autoPauseAfterSeconds(),
+            created.labels());
     return new Sandbox(transport, data);
   }
 
@@ -177,6 +178,13 @@ public final class CreateOsClient {
     Map<String, String> query = new HashMap<>();
     if (options.status() != null) {
       query.put("status", options.status().wireValue());
+    }
+    if (!options.labels().isEmpty()) {
+      try {
+        query.put("labels", transport.objectMapper().writeValueAsString(options.labels()));
+      } catch (com.fasterxml.jackson.core.JsonProcessingException exception) {
+        throw new IllegalArgumentException("Failed to encode sandbox label filter", exception);
+      }
     }
     return fetchAll("/v1/sandboxes", query, options.limit(), false, SandboxData.class).stream()
         .map(data -> new Sandbox(transport, data))

@@ -3,6 +3,13 @@
 All notable changes will be documented here. This project follows Semantic
 Versioning and the Keep a Changelog structure.
 
+## Unreleased
+
+### Added
+
+- Sandbox labels on create and response models, AND-matched label filtering in
+  `listSandboxes()`, and label merging through `Sandbox.setLabels()`.
+
 ## 0.1.2 - 2026-09-21
 
 ### Fixed
