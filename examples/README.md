@@ -33,6 +33,7 @@ Replace the final class with one of these:
 | `ingress-preview` | `sh.createos.examples.ingresspreview.IngressPreview` |
 | `managed-process` | `sh.createos.examples.managedprocess.ManagedProcessExample` |
 | `network` | `sh.createos.examples.network.NetworkExample` |
+| `snapshots` | `sh.createos.examples.snapshots.Snapshots` |
 
 Examples create billable resources. Their `finally` blocks make a best effort
 to destroy sandboxes and delete temporary account resources.

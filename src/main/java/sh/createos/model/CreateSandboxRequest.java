@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /** Request used to create a sandbox. */
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -23,12 +22,12 @@ public record CreateSandboxRequest(
     List<DiskAttachment> disks,
     String region,
     @JsonProperty("auto_pause_after_seconds") Integer autoPauseAfterSeconds,
-    Map<String, String> labels) {
+    Map<String, String> labels,
+    @JsonProperty("snapshot_id") String snapshotId) {
   /** Validates required values and defensively copies collection values. */
   public CreateSandboxRequest {
-    shape = Objects.requireNonNull(shape, "shape");
-    if (shape.isBlank()) {
-      throw new IllegalArgumentException("shape must not be blank");
+    if ((shape == null || shape.isBlank()) && (snapshotId == null || snapshotId.isBlank())) {
+      throw new IllegalArgumentException("shape or snapshotId must not be blank");
     }
     networks = networks == null ? List.of() : List.copyOf(networks);
     egressRules = egressRules == null ? List.of() : List.copyOf(egressRules);
@@ -71,12 +70,54 @@ public record CreateSandboxRequest(
         disks,
         region,
         autoPauseAfterSeconds,
-        Map.of());
+        Map.of(),
+        null);
+  }
+
+  /** Creates a request with labels, preserving the pre-snapshots constructor. */
+  public CreateSandboxRequest(
+      String shape,
+      String rootFileSystem,
+      String name,
+      List<NetworkEntry> networks,
+      Long diskMib,
+      List<String> egressRules,
+      Map<String, String> environmentVariables,
+      List<String> sshPublicKeys,
+      String hostId,
+      Map<String, String> nodeSelector,
+      Boolean ingressEnabled,
+      List<DiskAttachment> disks,
+      String region,
+      Integer autoPauseAfterSeconds,
+      Map<String, String> labels) {
+    this(
+        shape,
+        rootFileSystem,
+        name,
+        networks,
+        diskMib,
+        egressRules,
+        environmentVariables,
+        sshPublicKeys,
+        hostId,
+        nodeSelector,
+        ingressEnabled,
+        disks,
+        region,
+        autoPauseAfterSeconds,
+        labels,
+        null);
   }
 
   /** Returns a builder requiring the sandbox shape. */
   public static Builder builder(String shape) {
     return new Builder(shape);
+  }
+
+  /** Returns a builder that restores an owned ready reusable snapshot. */
+  public static Builder fromSnapshot(String snapshotId) {
+    return new Builder(null).snapshotId(snapshotId);
   }
 
   /** Builder for optional sandbox creation settings. */
@@ -96,6 +137,7 @@ public record CreateSandboxRequest(
     private String region;
     private Integer autoPauseAfterSeconds;
     private Map<String, String> labels = Map.of();
+    private String snapshotId;
 
     private Builder(String shape) {
       this.shape = shape;
@@ -116,6 +158,12 @@ public record CreateSandboxRequest(
     /** Sets user-defined metadata used to organize and filter sandboxes. */
     public Builder labels(Map<String, String> labels) {
       this.labels = labels;
+      return this;
+    }
+
+    /** Restores an owned ready reusable snapshot instead of a root filesystem. */
+    public Builder snapshotId(String snapshotId) {
+      this.snapshotId = snapshotId;
       return this;
     }
 
@@ -202,7 +250,8 @@ public record CreateSandboxRequest(
           disks,
           region,
           autoPauseAfterSeconds,
-          labels);
+          labels,
+          snapshotId);
     }
   }
 }

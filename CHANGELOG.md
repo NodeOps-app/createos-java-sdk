@@ -7,6 +7,8 @@ Versioning and the Keep a Changelog structure.
 
 ### Added
 
+- Reusable disk and full snapshot create, get, list, and delete operations,
+  plus sandbox restoration through `CreateSandboxRequest.fromSnapshot()`.
 - Sandbox labels on create and response models, AND-matched label filtering in
   `listSandboxes()`, and label merging through `Sandbox.setLabels()`.
 

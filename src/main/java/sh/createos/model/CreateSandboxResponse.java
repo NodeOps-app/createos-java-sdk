@@ -21,7 +21,8 @@ public record CreateSandboxResponse(
     @JsonProperty("egress") List<String> egressRules,
     @JsonProperty("bandwidth_quota_bytes") long bandwidthQuotaBytes,
     @JsonProperty("ingress_url_template") String ingressUrlTemplate,
-    Map<String, String> labels) {
+    Map<String, String> labels,
+    @JsonProperty("snapshot_id") String snapshotId) {
   /** Normalizes missing labels and keeps the response immutable. */
   public CreateSandboxResponse {
     labels = labels == null ? Map.of() : Map.copyOf(labels);
@@ -56,6 +57,41 @@ public record CreateSandboxResponse(
         egressRules,
         bandwidthQuotaBytes,
         ingressUrlTemplate,
-        Map.of());
+        Map.of(),
+        null);
+  }
+
+  /** Creates a response with labels, preserving the pre-snapshots constructor. */
+  public CreateSandboxResponse(
+      String id,
+      SandboxStatus status,
+      String name,
+      String ipAddress,
+      String shape,
+      String rootFileSystem,
+      int virtualCpu,
+      int memoryMib,
+      long diskMib,
+      double spawnMilliseconds,
+      List<String> egressRules,
+      long bandwidthQuotaBytes,
+      String ingressUrlTemplate,
+      Map<String, String> labels) {
+    this(
+        id,
+        status,
+        name,
+        ipAddress,
+        shape,
+        rootFileSystem,
+        virtualCpu,
+        memoryMib,
+        diskMib,
+        spawnMilliseconds,
+        egressRules,
+        bandwidthQuotaBytes,
+        ingressUrlTemplate,
+        labels,
+        null);
   }
 }
