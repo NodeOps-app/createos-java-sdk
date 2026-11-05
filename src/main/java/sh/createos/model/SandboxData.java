@@ -34,7 +34,8 @@ public record SandboxData(
     @JsonProperty("last_resumed_at") Instant lastResumedAt,
     @JsonProperty("forked_from") String forkedFrom,
     @JsonProperty("auto_pause_after_seconds") Integer autoPauseAfterSeconds,
-    Map<String, String> labels) {
+    Map<String, String> labels,
+    @JsonProperty("snapshot_id") String snapshotId) {
   /** Defensively copies collection values. */
   public SandboxData {
     egressRules = egressRules == null ? List.of() : List.copyOf(egressRules);
@@ -97,6 +98,65 @@ public record SandboxData(
         lastResumedAt,
         forkedFrom,
         autoPauseAfterSeconds,
-        Map.of());
+        Map.of(),
+        null);
+  }
+
+  /** Creates a projection with labels, preserving the pre-snapshots constructor. */
+  public SandboxData(
+      String id,
+      SandboxStatus status,
+      String ipAddress,
+      int virtualCpu,
+      int memoryMib,
+      long diskMib,
+      Instant createdAt,
+      boolean ingressEnabled,
+      String ingressUrlTemplate,
+      String name,
+      Instant runningAt,
+      Instant destroyedAt,
+      double spawnMilliseconds,
+      String shape,
+      String rootFileSystem,
+      String region,
+      List<String> egressRules,
+      List<String> environmentVariables,
+      List<String> sshPublicKeys,
+      String createdBy,
+      long bandwidthIngressBytes,
+      Instant pausedAt,
+      Instant lastResumedAt,
+      String forkedFrom,
+      Integer autoPauseAfterSeconds,
+      Map<String, String> labels) {
+    this(
+        id,
+        status,
+        ipAddress,
+        virtualCpu,
+        memoryMib,
+        diskMib,
+        createdAt,
+        ingressEnabled,
+        ingressUrlTemplate,
+        name,
+        runningAt,
+        destroyedAt,
+        spawnMilliseconds,
+        shape,
+        rootFileSystem,
+        region,
+        egressRules,
+        environmentVariables,
+        sshPublicKeys,
+        createdBy,
+        bandwidthIngressBytes,
+        pausedAt,
+        lastResumedAt,
+        forkedFrom,
+        autoPauseAfterSeconds,
+        labels,
+        null);
   }
 }

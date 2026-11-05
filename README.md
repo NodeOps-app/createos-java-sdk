@@ -101,6 +101,22 @@ sandbox.setLabels(Map.of("environment", "production"));
 List filters use AND semantics. `setLabels()` merges the supplied keys into the
 existing label map.
 
+## Capture and restore snapshots
+
+```java
+Snapshot snapshot =
+    sandbox.createSnapshot(new CreateSnapshotRequest(SnapshotType.DISK, "configured-workspace"));
+snapshot = client.snapshots().get(snapshot.id()); // poll until READY
+Sandbox restored =
+    client.createSandbox(CreateSandboxRequest.fromSnapshot(snapshot.id()).build());
+```
+
+Disk snapshots capture the filesystem. Full snapshots also retain memory and
+must be restored with their captured CPU, memory, and disk sizes. Snapshot
+capture requires a running source sandbox with no attached external disks.
+Each account may retain up to five snapshots across both types. See the compile-checked
+[snapshot example](examples/src/main/java/sh/createos/examples/snapshots/Snapshots.java).
+
 ## Delegate access to one sandbox
 
 An owner can create one delegated token for a sandbox. Plaintext is returned
@@ -384,6 +400,7 @@ validated by `ExamplesDocumentationTest`:
 - [HTTP execution server](examples/src/main/java/sh/createos/examples/executionserver/README.md)
 - [Command streaming](examples/src/main/java/sh/createos/examples/commandstreaming/README.md)
 - [Files and snapshots](examples/src/main/java/sh/createos/examples/filesandsnapshots/README.md)
+- [Reusable snapshots](examples/src/main/java/sh/createos/examples/snapshots/README.md)
 - [Ingress preview](examples/src/main/java/sh/createos/examples/ingresspreview/README.md)
 - [Private overlay network](examples/src/main/java/sh/createos/examples/network/README.md)
 - [Custom template](examples/src/main/java/sh/createos/examples/customtemplate/README.md)

@@ -12,6 +12,7 @@ import sh.createos.internal.NdjsonStream;
 import sh.createos.internal.RawResponse;
 import sh.createos.model.Bandwidth;
 import sh.createos.model.CommandStreamFrame;
+import sh.createos.model.CreateSnapshotRequest;
 import sh.createos.model.DiskAttachment;
 import sh.createos.model.Egress;
 import sh.createos.model.ForkSandboxRequest;
@@ -24,6 +25,7 @@ import sh.createos.model.SandboxAccessTokenMetadata;
 import sh.createos.model.SandboxData;
 import sh.createos.model.SandboxDisk;
 import sh.createos.model.SandboxStatus;
+import sh.createos.model.Snapshot;
 
 /** Stateful handle to one CreateOS sandbox. */
 public final class Sandbox {
@@ -164,6 +166,18 @@ public final class Sandbox {
   /** Resumes this sandbox and refreshes its cached projection. */
   public void resume() {
     lifecycle("/resume");
+  }
+
+  /** Starts a reusable snapshot capture from this running sandbox. */
+  public Snapshot createSnapshot(CreateSnapshotRequest request) {
+    return transport.send(
+        "POST",
+        path("/snapshots"),
+        Map.of(),
+        request,
+        RequestOptions.DEFAULT,
+        false,
+        Snapshot.class);
   }
 
   /** Creates an independent sandbox fork. */
@@ -594,7 +608,8 @@ public final class Sandbox {
         source.lastResumedAt(),
         source.forkedFrom(),
         source.autoPauseAfterSeconds(),
-        source.labels());
+        source.labels(),
+        source.snapshotId());
   }
 
   private record DestroyedResponse(String id, SandboxStatus status) {}

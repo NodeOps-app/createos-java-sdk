@@ -31,6 +31,7 @@ public final class CreateOsClient {
   private final TemplatesService templates;
   private final NetworksService networks;
   private final DisksService disks;
+  private final SnapshotsService snapshots;
 
   private CreateOsClient(Builder builder) {
     this.baseUri = builder.baseUri;
@@ -45,6 +46,7 @@ public final class CreateOsClient {
     this.templates = new TemplatesService(this);
     this.networks = new NetworksService(this);
     this.disks = new DisksService(this);
+    this.snapshots = new SnapshotsService(this);
   }
 
   /**
@@ -73,6 +75,11 @@ public final class CreateOsClient {
   /** Returns account-level persistent disk operations. */
   public DisksService disks() {
     return disks;
+  }
+
+  /** Returns account-level reusable snapshot operations. */
+  public SnapshotsService snapshots() {
+    return snapshots;
   }
 
   /** Returns the unauthenticated control-plane liveness state. */
@@ -159,7 +166,8 @@ public final class CreateOsClient {
             null,
             null,
             request.autoPauseAfterSeconds(),
-            created.labels());
+            created.labels(),
+            created.snapshotId());
     return new Sandbox(transport, data);
   }
 
