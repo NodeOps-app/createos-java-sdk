@@ -117,6 +117,26 @@ capture requires a running source sandbox with no attached external disks.
 Each account may retain up to five snapshots across both types. See the compile-checked
 [snapshot example](examples/src/main/java/sh/createos/examples/snapshots/Snapshots.java).
 
+## Checkpoint a directory
+
+Checkpoints keep local file history inside one running sandbox. Stop
+writers before create or restore; processes are not paused automatically.
+
+```java
+Checkpoint checkpoint = sandbox.checkpoints().create(
+    new CreateCheckpointRequest(
+        "/workspace/project", "before-update"));
+
+List<Checkpoint> checkpoints = sandbox.checkpoints().list();
+CheckpointRestoreResponse restored =
+    sandbox.checkpoints().restore(checkpoint.id());
+sandbox.checkpoints().delete(checkpoint.id());
+```
+
+Restore always uses the checkpoint's original path. Checkpoints remain on the
+sandbox disk and disappear with it. See the
+[runnable example](examples/src/main/java/sh/createos/examples/checkpoints/README.md).
+
 ## Delegate access to one sandbox
 
 An owner can create one delegated token for a sandbox. Plaintext is returned
@@ -401,6 +421,7 @@ validated by `ExamplesDocumentationTest`:
 - [Command streaming](examples/src/main/java/sh/createos/examples/commandstreaming/README.md)
 - [Files and snapshots](examples/src/main/java/sh/createos/examples/filesandsnapshots/README.md)
 - [Reusable snapshots](examples/src/main/java/sh/createos/examples/snapshots/README.md)
+- [Checkpoints](examples/src/main/java/sh/createos/examples/checkpoints/README.md)
 - [Ingress preview](examples/src/main/java/sh/createos/examples/ingresspreview/README.md)
 - [Private overlay network](examples/src/main/java/sh/createos/examples/network/README.md)
 - [Custom template](examples/src/main/java/sh/createos/examples/customtemplate/README.md)
