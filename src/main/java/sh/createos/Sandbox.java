@@ -35,6 +35,7 @@ public final class Sandbox {
   private final FilesService files;
   private final ProcessesService processes;
   private final ComputerService computer;
+  private final CheckpointsService checkpoints;
   private SandboxData data;
 
   Sandbox(HttpTransport transport, SandboxData data) {
@@ -43,6 +44,7 @@ public final class Sandbox {
     this.files = new FilesService(this);
     this.processes = new ProcessesService(this);
     this.computer = new ComputerService(this);
+    this.checkpoints = new CheckpointsService(this);
   }
 
   /** Returns the sandbox identifier. */
@@ -93,6 +95,11 @@ public final class Sandbox {
   /** Returns desktop computer-use operations for this sandbox. */
   public ComputerService computer() {
     return computer;
+  }
+
+  /** Returns local checkpoint operations for this sandbox. */
+  public CheckpointsService checkpoints() {
+    return checkpoints;
   }
 
   /** Returns a separate sandbox handle using a delegated token for runtime operations. */

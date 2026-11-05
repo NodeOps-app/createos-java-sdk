@@ -7,10 +7,16 @@ Versioning and the Keep a Changelog structure.
 
 ### Added
 
+- Checkpoint create, list, restore, and delete operations scoped to
+  a running sandbox through `Sandbox.checkpoints()`.
 - Reusable disk and full snapshot create, get, list, and delete operations,
   plus sandbox restoration through `CreateSandboxRequest.fromSnapshot()`.
 - Sandbox labels on create and response models, AND-matched label filtering in
   `listSandboxes()`, and label merging through `Sandbox.setLabels()`.
+
+### Changed
+
+- Set the next Maven version and default user agent to `0.1.3`.
 
 ## 0.1.2 - 2026-09-21
 

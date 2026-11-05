@@ -34,6 +34,7 @@ Replace the final class with one of these:
 | `managed-process` | `sh.createos.examples.managedprocess.ManagedProcessExample` |
 | `network` | `sh.createos.examples.network.NetworkExample` |
 | `snapshots` | `sh.createos.examples.snapshots.Snapshots` |
+| `checkpoints` | `sh.createos.examples.checkpoints.Checkpoints` |
 
 Examples create billable resources. Their `finally` blocks make a best effort
 to destroy sandboxes and delete temporary account resources.

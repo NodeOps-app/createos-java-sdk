@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sh.createos.model.CreateCheckpointRequest;
 import sh.createos.model.CreateSandboxRequest;
 import sh.createos.model.HealthResponse;
 import sh.createos.model.Shape;
@@ -194,6 +195,72 @@ class CreateOsClientTest {
     sandbox.setLabels(Map.of("team", "platform"));
 
     assertEquals(Map.of("environment", "test", "team", "platform"), sandbox.labels());
+  }
+
+  @Test
+  void managesCheckpointLifecycleAndEncodesIds() {
+    AtomicInteger step = new AtomicInteger();
+    server.createContext(
+        "/v1/sandboxes/sb-1",
+        exchange -> {
+          int index = step.getAndIncrement();
+          String path = exchange.getRequestURI().getRawPath();
+          if (index == 0) {
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{\"id\":\"sb-1\",\"status\":\"running\"}}");
+          } else if (index == 1) {
+            assertEquals("POST", exchange.getRequestMethod());
+            assertEquals("/v1/sandboxes/sb-1/checkpoints", path);
+            String body =
+                new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            assertTrue(body.contains("\"path\":\"/workspace/app\""));
+            assertTrue(body.contains("\"name\":\"before-update\""));
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{\"id\":\"cp_first\","
+                    + "\"path\":\"/workspace/app\","
+                    + "\"created_at\":\"2026-11-05T12:00:00Z\"}}");
+          } else if (index == 2) {
+            assertEquals("GET", exchange.getRequestMethod());
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":[{\"id\":\"cp_first\","
+                    + "\"path\":\"/workspace/app\","
+                    + "\"created_at\":\"2026-11-05T12:00:00Z\"}]}");
+          } else if (index == 3) {
+            assertEquals("POST", exchange.getRequestMethod());
+            assertEquals("/v1/sandboxes/sb-1/checkpoints/cp_first%2Fsegment/restore", path);
+            assertEquals(0, exchange.getRequestBody().readAllBytes().length);
+            respond(
+                exchange,
+                200,
+                "{\"status\":\"success\",\"data\":{"
+                    + "\"checkpoint_id\":\"cp_first/segment\","
+                    + "\"path\":\"/workspace/app\"}}");
+          } else {
+            assertEquals("DELETE", exchange.getRequestMethod());
+            assertEquals("/v1/sandboxes/sb-1/checkpoints/cp_first%2Fsegment", path);
+            respond(exchange, 200, "{\"status\":\"success\",\"data\":{}}");
+          }
+        });
+
+    Sandbox sandbox = client().getSandbox("sb-1");
+    var checkpoint =
+        sandbox
+            .checkpoints()
+            .create(new CreateCheckpointRequest("/workspace/app", "before-update"));
+    var checkpoints = sandbox.checkpoints().list();
+    var restored = sandbox.checkpoints().restore("cp_first/segment");
+    assertEquals("/workspace/app", restored.path());
+    sandbox.checkpoints().delete("cp_first/segment");
+
+    assertEquals("cp_first", checkpoint.id());
+    assertEquals(1, checkpoints.size());
+    assertEquals(5, step.get());
   }
 
   @Test
