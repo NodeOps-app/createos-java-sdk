@@ -101,6 +101,24 @@ sandbox.setLabels(Map.of("environment", "production"));
 List filters use AND semantics. `setLabels()` merges the supplied keys into the
 existing label map.
 
+## Limit sandbox lifetime
+
+```java
+Sandbox sandbox = client.createSandbox(
+    CreateSandboxRequest.builder("s-1vcpu-1gb")
+        .rootFileSystem("devbox:1")
+        .timeoutMinutes(10)
+        .sigtermBeforeExpiry(true)
+        .build());
+
+System.out.println(sandbox.data().expiresAt());
+```
+
+`timeoutMinutes()` accepts 2–1440 whole minutes and starts when the sandbox first
+reaches `RUNNING`. Activity and pause/resume do not extend the deadline.
+`sigtermBeforeExpiry()` requests a best-effort warning to managed workloads
+during the final minute and requires `timeoutMinutes()`.
+
 ## Capture and restore snapshots
 
 ```java

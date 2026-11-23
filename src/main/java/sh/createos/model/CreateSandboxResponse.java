@@ -2,6 +2,7 @@ package sh.createos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,9 @@ public record CreateSandboxResponse(
     @JsonProperty("bandwidth_quota_bytes") long bandwidthQuotaBytes,
     @JsonProperty("ingress_url_template") String ingressUrlTemplate,
     Map<String, String> labels,
-    @JsonProperty("snapshot_id") String snapshotId) {
+    @JsonProperty("snapshot_id") String snapshotId,
+    @JsonProperty("expires_at") Instant expiresAt,
+    @JsonProperty("sigterm_before_expiry") boolean sigtermBeforeExpiry) {
   /** Normalizes missing labels and keeps the response immutable. */
   public CreateSandboxResponse {
     labels = labels == null ? Map.of() : Map.copyOf(labels);
@@ -58,7 +61,9 @@ public record CreateSandboxResponse(
         bandwidthQuotaBytes,
         ingressUrlTemplate,
         Map.of(),
-        null);
+        null,
+        null,
+        false);
   }
 
   /** Creates a response with labels, preserving the pre-snapshots constructor. */
@@ -92,6 +97,8 @@ public record CreateSandboxResponse(
         bandwidthQuotaBytes,
         ingressUrlTemplate,
         labels,
-        null);
+        null,
+        null,
+        false);
   }
 }

@@ -167,7 +167,9 @@ public final class CreateOsClient {
             null,
             request.autoPauseAfterSeconds(),
             created.labels(),
-            created.snapshotId());
+            created.snapshotId(),
+            created.expiresAt(),
+            created.sigtermBeforeExpiry());
     return new Sandbox(transport, data);
   }
 

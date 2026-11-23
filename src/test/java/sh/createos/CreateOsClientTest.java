@@ -90,7 +90,7 @@ class CreateOsClientTest {
               exchange,
               200,
               """
-              {"status":"success","data":{"id":"sb-1","status":"running","labels":{"team":"backend"},"ip":"10.0.0.2","shape":"s-4vcpu-4gb","rootfs":"devbox:1","vcpu":4,"mem_mib":4096,"disk_mib":8192,"spawn_ms":42.5,"egress":[],"ingress_url_template":"https://<port>.example.test"}}
+              {"status":"success","data":{"id":"sb-1","status":"running","labels":{"team":"backend"},"expires_at":"2026-11-23T12:10:00Z","sigterm_before_expiry":true,"ip":"10.0.0.2","shape":"s-4vcpu-4gb","rootfs":"devbox:1","vcpu":4,"mem_mib":4096,"disk_mib":8192,"spawn_ms":42.5,"egress":[],"ingress_url_template":"https://<port>.example.test"}}
               """);
         });
 
@@ -100,6 +100,8 @@ class CreateOsClientTest {
                 CreateSandboxRequest.builder("s-4vcpu-4gb")
                     .rootFileSystem("devbox:1")
                     .labels(Map.of("team", "backend"))
+                    .timeoutMinutes(10)
+                    .sigtermBeforeExpiry(true)
                     .ingressEnabled(true)
                     .build());
 
@@ -108,7 +110,11 @@ class CreateOsClientTest {
     assertTrue(requestBody.get().contains("\"rootfs\":\"devbox:1\""));
     assertTrue(requestBody.get().contains("\"ingress_enabled\":true"));
     assertTrue(requestBody.get().contains("\"labels\":{\"team\":\"backend\"}"));
+    assertTrue(requestBody.get().contains("\"timeout_minutes\":10"));
+    assertTrue(requestBody.get().contains("\"sigterm_before_expiry\":true"));
     assertEquals(Map.of("team", "backend"), sandbox.labels());
+    assertEquals(java.time.Instant.parse("2026-11-23T12:10:00Z"), sandbox.data().expiresAt());
+    assertTrue(sandbox.data().sigtermBeforeExpiry());
     assertFalse(requestBody.get().contains("disk_mib"));
   }
 
