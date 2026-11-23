@@ -35,7 +35,9 @@ public record SandboxData(
     @JsonProperty("forked_from") String forkedFrom,
     @JsonProperty("auto_pause_after_seconds") Integer autoPauseAfterSeconds,
     Map<String, String> labels,
-    @JsonProperty("snapshot_id") String snapshotId) {
+    @JsonProperty("snapshot_id") String snapshotId,
+    @JsonProperty("expires_at") Instant expiresAt,
+    @JsonProperty("sigterm_before_expiry") boolean sigtermBeforeExpiry) {
   /** Defensively copies collection values. */
   public SandboxData {
     egressRules = egressRules == null ? List.of() : List.copyOf(egressRules);
@@ -99,7 +101,9 @@ public record SandboxData(
         forkedFrom,
         autoPauseAfterSeconds,
         Map.of(),
-        null);
+        null,
+        null,
+        false);
   }
 
   /** Creates a projection with labels, preserving the pre-snapshots constructor. */
@@ -157,6 +161,8 @@ public record SandboxData(
         forkedFrom,
         autoPauseAfterSeconds,
         labels,
-        null);
+        null,
+        null,
+        false);
   }
 }

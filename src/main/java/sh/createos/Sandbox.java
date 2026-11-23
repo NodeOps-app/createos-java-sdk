@@ -616,7 +616,9 @@ public final class Sandbox {
         source.forkedFrom(),
         source.autoPauseAfterSeconds(),
         source.labels(),
-        source.snapshotId());
+        source.snapshotId(),
+        source.expiresAt(),
+        source.sigtermBeforeExpiry());
   }
 
   private record DestroyedResponse(String id, SandboxStatus status) {}

@@ -15,7 +15,14 @@ public final class HelloWorld {
         CreateOsClient.builder().apiKey(System.getenv("CREATEOS_API_KEY")).build();
     Sandbox sandbox =
         client.createSandbox(
-            CreateSandboxRequest.builder("s-4vcpu-4gb").rootFileSystem("devbox:1").build());
+            CreateSandboxRequest.builder("s-4vcpu-4gb")
+                .rootFileSystem("devbox:1")
+                .timeoutMinutes(10)
+                .sigtermBeforeExpiry(true)
+                .build());
+    System.out.printf(
+        "expires_at=%s sigterm_before_expiry=%s%n",
+        sandbox.data().expiresAt(), sandbox.data().sigtermBeforeExpiry());
     try {
       var response =
           sandbox.runCommand(

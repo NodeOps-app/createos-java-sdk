@@ -7,6 +7,8 @@ Versioning and the Keep a Changelog structure.
 
 ### Added
 
+- Optional sandbox expiry through `CreateSandboxRequest.Builder.timeoutMinutes()`,
+  with `expiresAt()` response fields and an optional final-minute SIGTERM warning.
 - Checkpoint create, list, restore, and delete operations scoped to
   a running sandbox through `Sandbox.checkpoints()`.
 - Reusable disk and full snapshot create, get, list, and delete operations,

@@ -23,7 +23,9 @@ public record CreateSandboxRequest(
     String region,
     @JsonProperty("auto_pause_after_seconds") Integer autoPauseAfterSeconds,
     Map<String, String> labels,
-    @JsonProperty("snapshot_id") String snapshotId) {
+    @JsonProperty("snapshot_id") String snapshotId,
+    @JsonProperty("timeout_minutes") Integer timeoutMinutes,
+    @JsonProperty("sigterm_before_expiry") Boolean sigtermBeforeExpiry) {
   /** Validates required values and defensively copies collection values. */
   public CreateSandboxRequest {
     if ((shape == null || shape.isBlank()) && (snapshotId == null || snapshotId.isBlank())) {
@@ -71,6 +73,8 @@ public record CreateSandboxRequest(
         region,
         autoPauseAfterSeconds,
         Map.of(),
+        null,
+        null,
         null);
   }
 
@@ -107,6 +111,8 @@ public record CreateSandboxRequest(
         region,
         autoPauseAfterSeconds,
         labels,
+        null,
+        null,
         null);
   }
 
@@ -138,6 +144,8 @@ public record CreateSandboxRequest(
     private Integer autoPauseAfterSeconds;
     private Map<String, String> labels = Map.of();
     private String snapshotId;
+    private Integer timeoutMinutes;
+    private Boolean sigtermBeforeExpiry;
 
     private Builder(String shape) {
       this.shape = shape;
@@ -158,6 +166,18 @@ public record CreateSandboxRequest(
     /** Sets user-defined metadata used to organize and filter sandboxes. */
     public Builder labels(Map<String, String> labels) {
       this.labels = labels;
+      return this;
+    }
+
+    /** Sets the absolute lifetime in whole minutes (2-1440) from first reaching running. */
+    public Builder timeoutMinutes(int timeoutMinutes) {
+      this.timeoutMinutes = timeoutMinutes;
+      return this;
+    }
+
+    /** Requests a best-effort SIGTERM warning in the final minute. Requires a timeout. */
+    public Builder sigtermBeforeExpiry(boolean sigtermBeforeExpiry) {
+      this.sigtermBeforeExpiry = sigtermBeforeExpiry;
       return this;
     }
 
@@ -251,7 +271,9 @@ public record CreateSandboxRequest(
           region,
           autoPauseAfterSeconds,
           labels,
-          snapshotId);
+          snapshotId,
+          timeoutMinutes,
+          sigtermBeforeExpiry);
     }
   }
 }
